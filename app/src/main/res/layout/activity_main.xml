@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+tools:context="com.example.nils.rhymetime.MainActivity"
+android:id="@+id/activity_main"
+android:orientation="vertical"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_alignParentTop="true"
+android:background="#666">
+
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginTop="135dp"
+    android:background="#FFF" />
+
+<Button
+    android:text="@string/play"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:id="@+id/playButton"
+    style="@style/grey"
+    android:onClick="goToPlayOverview"/>
+
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#FFF" />
+
+<Button
+    android:text="@string/my_scores"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:id="@+id/myscoresButton"
+    style="@style/grey"
+    android:onClick="goToScoreOverview"/>
+
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#FFF" />
+
+<Button
+    android:text="@string/achievements"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:id="@+id/achievementsButton"
+    style="@style/grey"
+    android:onClick="goToAchievements"/>
+
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#FFF" />
+
+<Button
+    android:text="@string/instructions"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:id="@+id/instructionsButton"
+    style="@style/grey"
+    android:onClick="goToInstructions"/>
+
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#FFF" />
+</LinearLayout>

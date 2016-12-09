@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.nils.rhymetime.PlayOverviewActivity"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    android:background="#666"
+    android:id="@+id/activity_play_overview" >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="100dp"
+        android:background="#FFF" />
+
+    <Button
+        android:text="@string/easy"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:id="@+id/play1Button"
+        style="@style/grey"
+        android:onClick="goToPlay"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF" />
+
+    <Button
+        android:text="@string/medium"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:id="@+id/play2Button"
+        style="@style/grey"
+        android:onClick="goToPlay"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF" />
+
+    <Button
+        android:text="@string/hard"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:id="@+id/play3Button"
+        style="@style/grey"
+        android:onClick="goToPlay"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF" />
+
+    <Button
+        android:text="@string/insane"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:id="@+id/play4Button"
+        style="@style/grey"
+        android:onClick="goToPlay"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF" />
+
+    <Button
+        android:text="@string/random"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:id="@+id/play5Button"
+        style="@style/grey"
+        android:onClick="goToPlay"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF" />
+
+</LinearLayout>

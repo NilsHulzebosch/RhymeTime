@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/scroll"
+android:layout_width="match_parent"
+android:layout_height="wrap_content">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.nils.rhymetime.AchievementsActivity"
+    android:id="@+id/activity_achievements"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#666">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="1dp"
+        android:background="#FFF" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text="This"
+        android:id="@+id/A1Title"
+        style="@style/grey"
+        android:textColor="#FFFF00"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text=""
+        android:id="@+id/A1Text"
+        style="@style/achievementText" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text="is"
+        android:id="@+id/A2Title"
+        style="@style/grey"
+        android:textColor="#64FFFF" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text=""
+        android:id="@+id/A2Text"
+        style="@style/achievementText" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text="still"
+        android:id="@+id/A3Title"
+        style="@style/grey"
+        android:textColor="#FB0180" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text=""
+        android:id="@+id/A3Text"
+        style="@style/achievementText" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text="under"
+        android:id="@+id/A4Title"
+        style="@style/grey"
+        android:textColor="#21FE80" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text=""
+        android:id="@+id/A4Text"
+        style="@style/achievementText" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text="construction"
+        android:id="@+id/A5Title"
+        style="@style/grey"
+        android:textColor="#80FE08" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text=""
+        android:id="@+id/A5Text"
+        style="@style/achievementText" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text="!"
+        android:id="@+id/A6Title"
+        style="@style/grey"
+        android:textColor="#FD6766" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text=""
+        android:id="@+id/A6Text"
+        style="@style/achievementText" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF" />
+
+</LinearLayout>
+
+</ScrollView>
