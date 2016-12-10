@@ -25,14 +25,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class PlayActivity extends AppCompatActivity {
 
-    private String theRhymeWord; // the word you have to rhyme with in this level
-    private String searchResults; // all rhyme-words from the API as a string
+    public List<String> possibleWords; // from here one word is randomly chosen
+    private String theRhymeWord; // the chosen word you have to rhyme with
+    private String searchResults; // all rhyme-words for this word from the API as a string
 
-    private String niveau; // easy, medium, etc. (param from PlayOverviewActivity)
+    private String stage; // easy, medium, etc. (param from PlayOverviewActivity)
 
     // from searchResults (String) to JSON Object to ArrayList of RhymeWord objects
     private ArrayList<RhymeWord> allRhymeWords;
@@ -45,8 +49,11 @@ public class PlayActivity extends AppCompatActivity {
     private String currentWord; // word the user has currently guessed
     private int totalScore; // total score in this round
     private int totalRhymeWordsFound; // total rhyme words found in this round
+    private int totalTime; // start time of current stage
+    private int minSyllables; // min. amount of syllables for your rhyme words
+    private int maxSyllables; // max. amount of syllables for your rhyme words
 
-    // TextViews/EditText for the UI
+    // all XML objects for the UI
     private TextView wordToRhymeWithTV;
     private TextView timerTV;
     private View lineView;
@@ -55,23 +62,24 @@ public class PlayActivity extends AppCompatActivity {
     private GridView alreadyGuessedGridView;
     private CustomAdapter toDoListAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        Bundle extras = getIntent().getExtras();
+        stage = extras.getString("stage");
+
+        setTimeAndPossibleWords();
         initializeParameters();
         showStartingDialog();
         initializeAdapter();
-
-        Bundle extras = getIntent().getExtras();
-        niveau = extras.getString("niveau");
         getAllRhymes();
     }
 
     // initialize all (xml) objects and variables
     public void initializeParameters() {
-        theRhymeWord = "sing";
         alreadyGuessed = new ArrayList<>();
         wordToRhymeWithTV = (TextView) findViewById(R.id.wordToRhymeWithTV);
         timerTV = (TextView) findViewById(R.id.timer);
@@ -80,6 +88,88 @@ public class PlayActivity extends AppCompatActivity {
         checkButton = (Button) findViewById(R.id.checkButton);
         totalRhymeWordsFound = 0;
         totalScore = 0;
+
+        Random rand = new Random();
+        int i = rand.nextInt((possibleWords.size()) + 1);
+        theRhymeWord = possibleWords.get(i);
+    }
+
+    /* This method sets the correct time and the possible words list,
+     * based on the difficulty of the chosen stage. From this possible words list,
+     * a random word is chosen. When the "Random" stage is chosen,
+     * a totally random word is chosen using an API.
+     */
+    public void setTimeAndPossibleWords() {
+        switch (stage) {
+            case "easy":
+                totalTime = 70000;
+                possibleWords = Arrays.asList("sing", "cool", "boat", "plant",
+                        "cat", "walk", "blue", "pan", "brick", "fire");
+                minSyllables = 0;
+                maxSyllables = 25;
+                break;
+            case "medium":
+                totalTime = 60000;
+                possibleWords = Arrays.asList("house", "sleep", "yellow");
+                minSyllables = 0;
+                maxSyllables = 25;
+                break;
+            case "hard":
+                totalTime = 50000;
+                Random rand1 = new Random();
+                int randomNum1 = rand1.nextInt((1) + 1);
+                if (randomNum1 < 0.5) {
+                    possibleWords = Arrays.asList("fruit", "though", "height", "gum");
+                    minSyllables = 3;
+                    maxSyllables = 3;
+                } else {
+                    possibleWords = Arrays.asList("drawer", "rural", "verse", "pork");
+                    minSyllables = 0;
+                    maxSyllables = 25;
+                }
+
+                break;
+            case "insane":
+                totalTime = 40000;
+                Random rand2 = new Random();
+                int randomNum2 = rand2.nextInt((1) + 1);
+                if (randomNum2 < 0.335) {
+                    possibleWords = Arrays.asList("fruit", "though");
+                    minSyllables = 4;
+                    maxSyllables = 4;
+                } else if (randomNum2 < 0.67) {
+                    possibleWords = Arrays.asList("chorus", "tough", "cough", "bought", "arm");
+                    minSyllables = 3;
+                    maxSyllables = 25;
+                } else {
+                    possibleWords = Arrays.asList("babe", "against", "lyrics", "sullen",
+                            "gravity", "subtle", "colonel", "lettuce", "squirrel", "heighth");
+                    minSyllables = 0;
+                    maxSyllables = 25;
+                }
+
+                break;
+            default:
+                totalTime = 60000;
+                MyAsyncTask movieAsyncTask = new MyAsyncTask(this);
+                movieAsyncTask.execute("randomWord");
+                String randomWordResult;
+                try {
+                    randomWordResult = movieAsyncTask.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    randomWordResult = "";
+                    e.printStackTrace();
+                }
+
+                if (randomWordResult.length() == 0) {
+                    Toast.makeText(this, "No data was found", Toast.LENGTH_SHORT).show();
+                } else {
+                    minSyllables = 0;
+                    maxSyllables = 25;
+                    possibleWords = Arrays.asList(randomWordResult);
+                }
+                break;
+        }
     }
 
     public void initializeAdapter() {
@@ -151,7 +241,7 @@ public class PlayActivity extends AppCompatActivity {
     // set a timer corresponding to the level difficulty
     public void setTimer() {
 
-        new CountDownTimer(60000, 1000) {
+        new CountDownTimer(totalTime, 1000) {
 
             // update UI
             public void onTick(long millisUntilFinished) {
@@ -216,7 +306,7 @@ public class PlayActivity extends AppCompatActivity {
      */
     public void getAllRhymes() {
         MyAsyncTask movieAsyncTask = new MyAsyncTask(this);
-        movieAsyncTask.execute(theRhymeWord);
+        movieAsyncTask.execute("rhymeWord", theRhymeWord);
         String wordExpl = "\'" + theRhymeWord + "\'";
         wordToRhymeWithTV.setText(wordExpl);
 

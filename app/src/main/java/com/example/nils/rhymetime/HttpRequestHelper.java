@@ -11,9 +11,8 @@ import java.net.URL;
 public class HttpRequestHelper {
 
     // make string for URL
-    private static final String startURL = "https://api.datamuse.com/words?rel_rhy=";
-    private static String rhymeWord = "";
-    //private static final String startingWith = "";
+    private static final String rhymeWordURL = "https://api.datamuse.com/words?rel_rhy=";
+    private static final String randomWordURL = "http://www.setgetgo.com/randomword/get.php";
 
     // method to download from server
     protected static String downloadFromServer(String... params) {
@@ -22,12 +21,21 @@ public class HttpRequestHelper {
         String result = "";
 
         // get chosen tag from argument
-        String chosenTag = params[0]; // this is the user input
+        //String chosenTag = params[0]; // this is the user input
+
+        String correctUrl;
+        if (params[0].equals("rhymeWord")) {
+            // the rhyme word API needs to be called
+            correctUrl = rhymeWordURL + params[1];
+        } else {
+            // the random word API needs to be called
+            correctUrl = randomWordURL;
+        }
 
         // convert multiple words into words connected with '+' instead of space
-        rhymeWord = chosenTag.replaceAll(" ", "+");
+        //String rhymeWord = chosenTag.replaceAll(" ", "+");
 
-        String correctUrl = startURL + rhymeWord;
+        //String correctUrl = rhymeWordURL + rhymeWord;
 
         // turn string into URL
         URL url = null;

@@ -5,11 +5,11 @@
     <string name="my_scores">MY SCORES</string>
     <string name="play">PLAY</string>
     <string name="main_menu">MAIN MENU</string>
-    <string name="easy">EASY</string>
-    <string name="medium">MEDIUM</string>
-    <string name="hard">HARD</string>
-    <string name="insane">INSANE</string>
-    <string name="random">RANDOM</string>
+    <string name="easy">easy</string>
+    <string name="medium">medium</string>
+    <string name="hard">hard</string>
+    <string name="insane">insane</string>
+    <string name="random">random</string>
     <string name="checkmark">checkmark</string>
     <string name="objective">Objective: find as much rhyme words as possible
         within the specified time. Only true rhymes count.

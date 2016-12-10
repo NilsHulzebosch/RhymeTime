@@ -30,18 +30,22 @@ public class PlayOverviewActivity extends AppCompatActivity {
         if (L1Completed) {
             button = (Button) findViewById(R.id.play1Button);
             button.setTextColor(Color.parseColor("#21FE80"));
+            button.setAllCaps(true);
         }
         if (L2Completed) {
             button = (Button) findViewById(R.id.play2Button);
             button.setTextColor(Color.parseColor("#21FE80"));
+            button.setAllCaps(true);
         }
         if (L3Completed) {
             button = (Button) findViewById(R.id.play3Button);
             button.setTextColor(Color.parseColor("#21FE80"));
+            button.setAllCaps(true);
         }
         if (L4Completed) {
             button = (Button) findViewById(R.id.play4Button);
             button.setTextColor(Color.parseColor("#21FE80"));
+            button.setAllCaps(true);
         }
         if (L5Completed) {
             button = (Button) findViewById(R.id.play5Button);
@@ -51,8 +55,11 @@ public class PlayOverviewActivity extends AppCompatActivity {
 
     // when a user clicks a level button, go to the PlayActivity
     public void goToPlay(View view) {
+        Button b = (Button)view;
+        String buttonText = b.getText().toString();
+
         Intent goToPlay = new Intent(this, PlayActivity.class);
-        goToPlay.putExtra("niveau", "1");
+        goToPlay.putExtra("stage", buttonText);
         startActivity(goToPlay);
         finish();
     }
