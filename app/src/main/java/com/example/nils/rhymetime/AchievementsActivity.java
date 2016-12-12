@@ -24,14 +24,13 @@ public class AchievementsActivity extends AppCompatActivity {
         boolean A3Unlocked = shared.getBoolean("A3Unlocked", false);
         boolean A4Unlocked = shared.getBoolean("A4Unlocked", false);
         boolean A5Unlocked = shared.getBoolean("A5Unlocked", false);
-        boolean A6Unlocked = shared.getBoolean("A6Unlocked", false);
 
         //
         int alpha = 20;
         TextView title;
         TextView text;
 
-        /*
+
         // if achievement is not unlocked, set opacity to make it semi-invisible
         if (!A1Unlocked) {
             title = ((TextView)findViewById(R.id.A1Title));
@@ -64,13 +63,7 @@ public class AchievementsActivity extends AppCompatActivity {
             text = ((TextView)findViewById(R.id.A5Text));
             text.setTextColor(Color.argb(alpha, 255, 0, 0));
         }
-        if (!A6Unlocked) {
-            title = ((TextView)findViewById(R.id.A6Title));
-            title.setTextColor(Color.argb(alpha, 255, 0, 0));
-            text = ((TextView)findViewById(R.id.A6Text));
-            text.setTextColor(Color.argb(alpha, 255, 0, 0));
-        }
-        */
+
     }
 
 }

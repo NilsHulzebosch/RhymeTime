@@ -1,10 +1,12 @@
 package com.example.nils.rhymetime;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -61,6 +63,7 @@ public class PlayActivity extends AppCompatActivity {
     private View lineView;
     private EditText currentWordET;
     private Button checkButton;
+    private TextView infoTV;
     private GridView alreadyGuessedGridView;
     private CustomAdapter toDoListAdapter;
 
@@ -84,16 +87,20 @@ public class PlayActivity extends AppCompatActivity {
     // initialize all (xml) objects and variables
     public void initializeParameters() {
         alreadyGuessed = new ArrayList<>();
+        allRhymeWords = new ArrayList<>();
+
         wordToRhymeWithTV = (TextView) findViewById(R.id.wordToRhymeWithTV);
         timerTV = (TextView) findViewById(R.id.timer);
         lineView = findViewById(R.id.lineView);
         currentWordET = (EditText) findViewById(R.id.currentWordET);
         checkButton = (Button) findViewById(R.id.checkButton);
+        infoTV = (TextView)findViewById(R.id.infoTV);
         totalRhymeWordsFound = 0;
         totalScore = 0;
 
         Random rand = new Random();
         int i = rand.nextInt((possibleWords.size()) + 1);
+        System.out.println("i is:" + i + "  and possibleWords is " + possibleWords);
         theRhymeWord = possibleWords.get(i);
     }
 
@@ -226,6 +233,7 @@ public class PlayActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         checkButton.setVisibility(View.VISIBLE);
+        infoTV.setVisibility(View.VISIBLE);
     }
 
     // set all components to visible
@@ -239,6 +247,7 @@ public class PlayActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(currentWordET.getWindowToken(), 0);
         currentWordET.clearFocus();
         checkButton.setVisibility(View.INVISIBLE);
+        infoTV.setVisibility(View.INVISIBLE);
     }
 
     // set a timer corresponding to the level difficulty
@@ -250,13 +259,11 @@ public class PlayActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 remainingTime = millisUntilFinished;
                 String timerText = "" + millisUntilFinished / 1000 + "";
-                //if (millisUntilFinished / 1000 >= 10) {
-                //    timerTV.setPadding(50, 50, 50, 50);
-                //    timerTV.setGravity(Gravity.CENTER_HORIZONTAL);
-                //    timerTV.setGravity(Gravity.CENTER_VERTICAL);
-                //} else {
-                //    timerTV.setPadding(80, 40, 80, 40);
-                //}
+                if (millisUntilFinished / 1000 >= 10) {
+                    timerTV.setPadding(48, 0, 0, 0);
+                } else {
+                    timerTV.setPadding(75, 0, 0, 0);
+                }
                 timerTV.setGravity(Gravity.CENTER_HORIZONTAL);
                 timerTV.setGravity(Gravity.CENTER_VERTICAL);
                 timerTV.setText(timerText);
@@ -267,6 +274,7 @@ public class PlayActivity extends AppCompatActivity {
                 timerTV.setText("0");
                 makeUIInVisible();
                 showEndingDialog();
+                checkForAchievements();
             }
 
         }.start();
@@ -324,6 +332,11 @@ public class PlayActivity extends AppCompatActivity {
 
         if (searchResults.length() == 0 || searchResults.equals("[]")) {
             Toast.makeText(this, "No data was found", Toast.LENGTH_SHORT).show();
+            // go back to PlayOverviewActivity
+            Intent goToPlayOverviewActivity = new Intent(getApplicationContext(),
+                    PlayOverviewActivity.class);
+            startActivity(goToPlayOverviewActivity);
+            finish();
         } else {
             try {
                 allRhymeWords = new ArrayList<>();
@@ -464,4 +477,130 @@ public class PlayActivity extends AppCompatActivity {
         leaveBuilder.show();
     }
 
+    /* This method looks which achievements are already unlocked,
+     * and for the ones that are still unlocked, check whether they are unlocked
+     * during this game. If they are unlocked, show message and add to achievemens.
+     */
+    public void checkForAchievements() {
+        // get SharedPreferences
+        SharedPreferences shared = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+        boolean A1Completed = shared.getBoolean("A1Unlocked", false);
+        boolean A2Completed = shared.getBoolean("A2Unlocked", false);
+        boolean A3Completed = shared.getBoolean("A3Unlocked", false);
+        boolean A4Completed = shared.getBoolean("A4Unlocked", false);
+        boolean A5Completed = shared.getBoolean("A5Unlocked", false);
+
+        // customized Toast
+        LinearLayout layout = new LinearLayout(this);
+        TextView tv = new TextView(this);
+        tv.setTextColor(Color.BLACK);
+        tv.setTextSize(20);
+        tv.setPadding(100, 100, 100, 100);
+        tv.setWidth(2000);
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        tv.setGravity(Gravity.CENTER_VERTICAL);
+
+        // save to SharedPreferences
+        SharedPreferences.Editor editor = getSharedPreferences(
+                "SharedPreferences", MODE_PRIVATE).edit();
+
+        if (!A1Completed) {
+            // if stage = easy & words >= 10, unlock "Easy Complication"
+            if (stage.equals("easy") && totalRhymeWordsFound >= 10) {
+                editor.putBoolean("A1Unlocked", true); // save to SharedPreferences
+
+                // give Toast
+                layout.setBackgroundResource(R.color.A1Color);
+                tv.setText("Congratulations! You unlocked \n" +
+                        "\'Easy Complication\' \n " +
+                        "You found " + totalRhymeWordsFound + " words in Easy mode." +
+                        "Easy peasy ha?");
+            }
+        }
+
+        if (!A2Completed) {
+            // if found >= 1 rhyme word in every stage, unlock "The Gentlest Experimentalist"
+            if (true) {
+                editor.putBoolean("A2Unlocked", true); // save to SharedPreferences
+
+                // give Toast
+                layout.setBackgroundResource(R.color.A2Color);
+                tv.setText("Congratulations! You unlocked \n" +
+                        "\'The Gentlest Experimentalist\' \n " +
+                        "You found at least one rhyme word in every stage." +
+                        "Keep up the good work!");
+            }
+        }
+
+        if (!A3Completed) {
+            // if score >= 1001, unlock "1001 Nights of Practice"
+            if (totalScore >= 1001) {
+                editor.putBoolean("A3Unlocked", true); // save to SharedPreferences
+
+                // give Toast
+                layout.setBackgroundResource(R.color.A3Color);
+                tv.setText("Congratulations! You unlocked \n" +
+                        "\'1001 Nights of Practice\' \n " +
+                        "You scored " + totalScore + "points. Nice!");
+            }
+        }
+
+        if (!A4Completed) {
+            // if stage = hard & words >= 6, unlock "Shaky Spears!"
+            if (stage.equals("hard") && totalRhymeWordsFound >= 6) {
+                // give Toast
+                editor.putBoolean("A4Unlocked", true); // save to SharedPreferences
+
+                // give Toast
+                layout.setBackgroundResource(R.color.A4Color);
+                tv.setText("Congratulations! You unlocked \n" +
+                        "\'Shaky Spears!\' \n " +
+                        "You found " + totalRhymeWordsFound +
+                        " words in hard mode. Good job!");
+            }
+        }
+
+        if (!A5Completed) {
+            // if stage = insane & words >= 8, unlock "You should be a rapper :-)"
+            if (stage.equals("insane") && totalRhymeWordsFound >= 8) {
+                editor.putBoolean("A5Unlocked", true); // save to SharedPreferences
+
+                // give Toast
+                layout.setBackgroundResource(R.color.A5Color);
+                tv.setText("Congratulations! You unlocked \n" +
+                        "\'You should be a rapper :-)\' \n " +
+                        "You found " + totalRhymeWordsFound +
+                        " words in insane mode. Insane!");
+            }
+        }
+        editor.apply();
+
+        // customized toast
+        layout.addView(tv);
+        final Toast toast = new Toast(this);
+        toast.setView(layout);
+        toast.setGravity(Gravity.TOP, Gravity.CENTER_HORIZONTAL, Gravity.CENTER_VERTICAL);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.show();
+
+        new CountDownTimer(3500, 1000)
+        {
+
+            public void onTick(long millisUntilFinished) {toast.show();}
+            public void onFinish() {toast.show();}
+
+        }.start();
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    //public static void hideSoftKeyboard(Activity activity) {
+    //    InputMethodManager inputMethodManager =
+    //            (InputMethodManager) activity.getSystemService(
+    //                    Activity.INPUT_METHOD_SERVICE);
+    //    inputMethodManager.hideSoftInputFromWindow(
+    //            activity.getCurrentFocus().getWindowToken(), 0);
+    //}
 }

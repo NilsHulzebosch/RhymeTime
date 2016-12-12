@@ -23,15 +23,15 @@ android:layout_height="wrap_content">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text="This"
+        android:text="Easy Complication"
         android:id="@+id/A1Title"
         style="@style/grey"
-        android:textColor="#FFFF00"/>
+        android:textColor="@color/A1Color"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text=""
+        android:text="Rhymed 10 or more words in \'Easy\' mode"
         android:id="@+id/A1Text"
         style="@style/achievementText" />
 
@@ -43,15 +43,15 @@ android:layout_height="wrap_content">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text="is"
+        android:text="The Gentlest Experimentalist"
         android:id="@+id/A2Title"
         style="@style/grey"
-        android:textColor="#64FFFF" />
+        android:textColor="@color/A2Color" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text=""
+        android:text="Got at least 1 rhyme word in every stage"
         android:id="@+id/A2Text"
         style="@style/achievementText" />
 
@@ -63,15 +63,15 @@ android:layout_height="wrap_content">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text="still"
+        android:text="1001 Nights of Practice"
         android:id="@+id/A3Title"
         style="@style/grey"
-        android:textColor="#FB0180" />
+        android:textColor="@color/A3Color" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text=""
+        android:text="Scored 1001 points or more in a stage"
         android:id="@+id/A3Text"
         style="@style/achievementText" />
 
@@ -83,15 +83,15 @@ android:layout_height="wrap_content">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text="under"
+        android:text="Shaky Spears!"
         android:id="@+id/A4Title"
         style="@style/grey"
-        android:textColor="#21FE80" />
+        android:textColor="@color/A4Color" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text=""
+        android:text="Rhymed 6 or more words in /'Hard/' mode"
         android:id="@+id/A4Text"
         style="@style/achievementText" />
 
@@ -103,36 +103,16 @@ android:layout_height="wrap_content">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text="construction"
+        android:text="You should be a rapper..."
         android:id="@+id/A5Title"
         style="@style/grey"
-        android:textColor="#80FE08" />
+        android:textColor="@color/A5Color" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text=""
+        android:text="Rhymed 8 or more words in /'Insane/' mode"
         android:id="@+id/A5Text"
-        style="@style/achievementText" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#FFF" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:text="!"
-        android:id="@+id/A6Title"
-        style="@style/grey"
-        android:textColor="#FD6766" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:text=""
-        android:id="@+id/A6Text"
         style="@style/achievementText" />
 
     <View

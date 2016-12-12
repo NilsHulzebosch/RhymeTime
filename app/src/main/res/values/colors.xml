@@ -8,4 +8,10 @@
     <color name="correctWordToast">#3f873f</color>
     <color name="neutralWordToast">#000</color>
 
+    <color name="A1Color">#FFFF00</color>
+    <color name="A2Color">#64FFFF</color>
+    <color name="A3Color">#FB0180</color>
+    <color name="A4Color">#21FE80</color>
+    <color name="A5Color">#80FE08</color>
+
 </resources>

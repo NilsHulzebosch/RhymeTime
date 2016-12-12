@@ -27,25 +27,20 @@ public class MainActivity extends AppCompatActivity {
     public void goToPlayOverview(View view) {
         Intent goToPlayOverview = new Intent(this, PlayOverviewActivity.class);
         startActivity(goToPlayOverview);
-        // finish(); // ?
     }
 
     public void goToScoreOverview(View view) {
         Intent goToScoreOverview = new Intent(this, ScoreOverviewActivity.class);
         startActivity(goToScoreOverview);
-        // finish(); // ?
     }
 
     public void goToAchievements(View view) {
         Intent goToAchievements = new Intent(this, AchievementsActivity.class);
         startActivity(goToAchievements);
-        // finish(); // ?
     }
 
     public void goToInstructions(View view) {
         Intent goToInstructions = new Intent(this, InstructionsActivity.class);
         startActivity(goToInstructions);
-        // finish(); // ?
     }
-
 }

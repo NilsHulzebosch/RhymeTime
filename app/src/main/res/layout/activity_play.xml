@@ -8,11 +8,6 @@
     android:layout_alignParentTop="true"
     android:background="#666">
 
-    <com.example.nils.rhymetime.CustomEditText
-        android:id="@+id/CEditText"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -91,13 +86,16 @@
         android:layout_marginBottom="250dp"
         android:visibility="invisible" />
 
-    <View
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="2000dp"
-        android:background="#000"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/currentWordET">
-
-    </View>
+        android:layout_height="match_parent"
+        android:id="@+id/infoTV"
+        android:text="Press the back button one more time to quit the game."
+        android:layout_marginTop="400dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@android:color/white"
+        android:visibility="invisible"
+        />
 
 </RelativeLayout>
