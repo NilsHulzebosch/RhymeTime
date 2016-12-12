@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -50,6 +51,7 @@ public class PlayActivity extends AppCompatActivity {
     private int totalScore; // total score in this round
     private int totalRhymeWordsFound; // total rhyme words found in this round
     private int totalTime; // start time of current stage
+    private long remainingTime; // remaining time when pressing 'back'-button
     private int minSyllables; // min. amount of syllables for your rhyme words
     private int maxSyllables; // max. amount of syllables for your rhyme words
 
@@ -62,6 +64,7 @@ public class PlayActivity extends AppCompatActivity {
     private GridView alreadyGuessedGridView;
     private CustomAdapter toDoListAdapter;
 
+    private CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,7 +209,7 @@ public class PlayActivity extends AppCompatActivity {
         startBuilder.setPositiveButton("START!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 makeUIVisible();
-                setTimer();
+                setTimer(totalTime);
             }
         });
         //AlertDialog startAlert = startBuilder.create();
@@ -239,12 +242,13 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     // set a timer corresponding to the level difficulty
-    public void setTimer() {
+    public void setTimer(long totalTime) {
 
-        new CountDownTimer(totalTime, 1000) {
+        countDownTimer = new CountDownTimer(totalTime, 1000) {
 
             // update UI
             public void onTick(long millisUntilFinished) {
+                remainingTime = millisUntilFinished;
                 String timerText = "" + millisUntilFinished / 1000 + "";
                 //if (millisUntilFinished / 1000 >= 10) {
                 //    timerTV.setPadding(50, 50, 50, 50);
@@ -264,6 +268,7 @@ public class PlayActivity extends AppCompatActivity {
                 makeUIInVisible();
                 showEndingDialog();
             }
+
         }.start();
     }
 
@@ -418,4 +423,45 @@ public class PlayActivity extends AppCompatActivity {
         }
 
     }
+
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            countDownTimer.cancel(); // pause timer
+            long time = remainingTime;
+            showLeavingDialog(remainingTime);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void showLeavingDialog(final long remainingTime) {
+        AlertDialog.Builder leaveBuilder = new AlertDialog.Builder(
+                new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+        leaveBuilder.setTitle("Psst");
+        leaveBuilder.setMessage("Your current progress will not be saved. " +
+                " Are you sure you want to leave?");
+        leaveBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // new timer
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                setTimer(remainingTime);
+            }
+        });
+        leaveBuilder.setPositiveButton("OK!", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // go back to MainActivity
+                Intent goToMainActivity = new Intent(getApplicationContext(),
+                        MainActivity.class);
+                startActivity(goToMainActivity);
+                finish();
+            }
+        });
+        //AlertDialog leaveAlert = startBuilder.create();
+        leaveBuilder.show();
+    }
+
 }
