@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class CustomAdapter extends ArrayAdapter<String> {
 
@@ -23,6 +22,7 @@ public class CustomAdapter extends ArrayAdapter<String> {
 
         final String guessedWord = getItem(position);
 
+        // to make the UI a little bit more fun, rotate the words based on their position
         int rotation;
         if (position % 2 == 0) {
             rotation = (position % 2) * 10 + 3;

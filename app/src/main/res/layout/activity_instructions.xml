@@ -14,22 +14,4 @@ android:background="#666">
     android:text="@string/objective"
     style="@style/grey"/>
 
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:text="Horizontal cars can move left and right."
-    style="@style/grey"/>
-
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:text="Vertical cars can move up and down."
-    style="@style/grey"/>
-
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:text="If you click on a car, the possible moves appear as buttons."
-    style="@style/grey"/>
-
 </LinearLayout>

@@ -21,6 +21,7 @@
         android:layout_height="70dp"
         android:id="@+id/play1Button"
         style="@style/grey"
+        android:background="#464646"
         android:onClick="goToPlay"/>
 
     <View
@@ -34,6 +35,7 @@
         android:layout_height="70dp"
         android:id="@+id/play2Button"
         style="@style/grey"
+        android:background="#333333"
         android:onClick="goToPlay"/>
 
     <View
@@ -47,6 +49,7 @@
         android:layout_height="70dp"
         android:id="@+id/play3Button"
         style="@style/grey"
+        android:background="#191919"
         android:onClick="goToPlay"/>
 
     <View
@@ -60,11 +63,13 @@
         android:layout_height="70dp"
         android:id="@+id/play4Button"
         style="@style/grey"
+        android:background="#000"
+
         android:onClick="goToPlay"/>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:background="#FFF" />
 
     <Button
@@ -73,11 +78,12 @@
         android:layout_height="70dp"
         android:id="@+id/play5Button"
         style="@style/grey"
+        android:background="#666666"
         android:onClick="goToPlay"/>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:background="#FFF" />
 
 </LinearLayout>

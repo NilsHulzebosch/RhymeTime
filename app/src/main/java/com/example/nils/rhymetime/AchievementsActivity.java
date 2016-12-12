@@ -12,10 +12,13 @@ public class AchievementsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
-
         showAchievementStatus();
     }
 
+    /* Get SharedPreferences for achievements. For every achievements that is still
+     * unlocked, set opacity so you cannot read it but see that it's there.
+     * The ones that are unlocked have their own color and remain unchanged.
+     */
     public void showAchievementStatus() {
         // get SharedPreferences
         SharedPreferences shared = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
@@ -25,11 +28,9 @@ public class AchievementsActivity extends AppCompatActivity {
         boolean A4Unlocked = shared.getBoolean("A4Unlocked", false);
         boolean A5Unlocked = shared.getBoolean("A5Unlocked", false);
 
-        //
-        int alpha = 20;
+        int alpha = 15;
         TextView title;
         TextView text;
-
 
         // if achievement is not unlocked, set opacity to make it semi-invisible
         if (!A1Unlocked) {
@@ -37,7 +38,6 @@ public class AchievementsActivity extends AppCompatActivity {
             title.setTextColor(Color.argb(alpha, 255, 0, 0));
             text = ((TextView)findViewById(R.id.A1Text));
             text.setTextColor(Color.argb(alpha, 255, 0, 0));
-            //text.setBackgroundResource(R.drawable.goldenlock);
         }
         if (!A2Unlocked) {
             title = ((TextView)findViewById(R.id.A2Title));
@@ -63,7 +63,5 @@ public class AchievementsActivity extends AppCompatActivity {
             text = ((TextView)findViewById(R.id.A5Text));
             text.setTextColor(Color.argb(alpha, 255, 0, 0));
         }
-
     }
-
 }

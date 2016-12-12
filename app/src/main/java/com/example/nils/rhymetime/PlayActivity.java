@@ -1,6 +1,5 @@
 package com.example.nils.rhymetime;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
@@ -110,6 +109,7 @@ public class PlayActivity extends AppCompatActivity {
      * a totally random word is chosen using an API.
      */
     public void setTimeAndPossibleWords() {
+        possibleWords = new ArrayList<>();
         switch (stage) {
             case "easy":
                 totalTime = 70000;
@@ -137,7 +137,6 @@ public class PlayActivity extends AppCompatActivity {
                     minSyllables = 0;
                     maxSyllables = 25;
                 }
-
                 break;
             case "insane":
                 totalTime = 40000;
@@ -157,7 +156,6 @@ public class PlayActivity extends AppCompatActivity {
                     minSyllables = 0;
                     maxSyllables = 25;
                 }
-
                 break;
             default:
                 totalTime = 60000;
@@ -350,16 +348,14 @@ public class PlayActivity extends AppCompatActivity {
                     int numSyllables = 0;
 
                     word = currentObject.getString("word");
-                    System.out.println("word" + word);
 
                     if (currentObject.has("score")) {
                         score = currentObject.optInt("score", 0);
-                        System.out.println("score" + score);
+                        score = score / rhymeWordsJSON.length() * 10;
                     }
 
                     if (currentObject.has("numSyllables")) {
                         numSyllables = currentObject.optInt("numSyllables", 0);
-                        System.out.println("numSyllables" + numSyllables);
                     }
 
                     allRhymeWords.add(new RhymeWord(

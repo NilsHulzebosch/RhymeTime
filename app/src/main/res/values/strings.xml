@@ -12,7 +12,16 @@
     <string name="random">random</string>
     <string name="checkmark">checkmark</string>
     <string name="objective">Objective: find as much rhyme words as possible
-        within the specified time. Only true rhymes count.
+        within the specified time. Only perfect rhymes count.
         Each word will give you a specific amount of points.
-        Better rhyme words will give more points. Good luck!</string>
+        Better rhyme words will give more points. \n \n
+        FYI, the time frames are: \n
+        Easy: 70 sec \n
+        Medium: 60 sec \n
+        Hard: 50 sec \n
+        Insane: 40 sec \n
+        Random: 60 sec \n \n
+        Also, the words will keep getting harder. Do you got what it takes
+        to become the next rhyme master? Good luck!
+    </string>
 </resources>

@@ -20,9 +20,6 @@ public class HttpRequestHelper {
         // declare return String result
         String result = "";
 
-        // get chosen tag from argument
-        //String chosenTag = params[0]; // this is the user input
-
         String correctUrl;
         if (params[0].equals("rhymeWord")) {
             // the rhyme word API needs to be called
@@ -32,11 +29,6 @@ public class HttpRequestHelper {
             correctUrl = randomWordURL;
         }
 
-        // convert multiple words into words connected with '+' instead of space
-        //String rhymeWord = chosenTag.replaceAll(" ", "+");
-
-        //String correctUrl = rhymeWordURL + rhymeWord;
-
         // turn string into URL
         URL url = null;
         try {
@@ -44,7 +36,6 @@ public class HttpRequestHelper {
         } catch(MalformedURLException e) {
             e.printStackTrace();
         }
-
 
         // make the connection;
         HttpURLConnection connection;
@@ -73,7 +64,6 @@ public class HttpRequestHelper {
                             new InputStreamReader(connection.getErrorStream()) );
                     // communicate correct error
                     System.out.println("ResponseCode was not correct.");
-
                 }
 
             } catch(IOException e) {
