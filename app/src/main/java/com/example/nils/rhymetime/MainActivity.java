@@ -15,6 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,10 +28,30 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static String FIREBASE_URL = "https://rhymetime-b8195.firebaseio.com/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Firebase.setAndroidContext(this);
+        Firebase ref = new Firebase(FIREBASE_URL);
+        Firebase newRef = ref.child("Score").push();
+
+        ArrayList<String> testArrayList = new ArrayList<>();
+        // create new score object with the correct variables
+        Score score1 = new Score("test_username",
+                800,
+                8,
+                "Medium",
+                "testWord2",
+                testArrayList);
+
+        //newRef.child("Score").setValue(score1);
+        //newRef.child("Score").setValue(score2);
+
+        newRef.setValue(score1);
 
         // if the user plays the game for the first time, show instruction screens
         SharedPreferences shared = getSharedPreferences("SharedPreferences", MODE_PRIVATE);

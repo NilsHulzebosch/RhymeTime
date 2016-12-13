@@ -106,7 +106,7 @@ public class PlayActivity extends AppCompatActivity {
     /* This method sets the correct time and the possible words list,
      * based on the difficulty of the chosen stage. From this possible words list,
      * a random word is chosen. When the "Random" stage is chosen,
-     * a totally random word is chosen using an API.
+     * a totally random word is chosen using an API (does NOT work yet!)
      */
     public void setTimeAndPossibleWords() {
         possibleWords = new ArrayList<>();
@@ -158,6 +158,7 @@ public class PlayActivity extends AppCompatActivity {
                 }
                 break;
             default:
+                // the random stage, currently not working
                 totalTime = 60000;
                 MyAsyncTask movieAsyncTask = new MyAsyncTask(this);
                 movieAsyncTask.execute("randomWord");
@@ -180,22 +181,24 @@ public class PlayActivity extends AppCompatActivity {
         }
     }
 
+    // initialize GridView and CustomAdapter
     public void initializeAdapter() {
         alreadyGuessedGridView = (GridView) findViewById(R.id.alreadyGuessedGridView);
         toDoListAdapter = new CustomAdapter(this, alreadyGuessed);
         alreadyGuessedGridView.setAdapter(toDoListAdapter);
     }
 
+    // when a word is guessed (and added to ArrayList), update adapter
     public void updateAdapter() {
         toDoListAdapter.notifyDataSetChanged();
         currentWordET.setFocusableInTouchMode(true);
         currentWordET.requestFocus();
     }
 
-    /* This method shows the dialog when the user enters this activity.
-     * The user gets information about the word, the time and other restrictions.
+    /* This method shows the welcome dialog when the user enters this activity.
+     * The user gets information about the word and the time ((and other restrictions)).
      * The user can press 'start' or go back to the Main Menu.
-     * Pressing start makes the UI visible and sets the timer.
+     * Pressing start makes the UI visible and sets the timer (starting automatically).
      */
     public void showStartingDialog() {
         AlertDialog.Builder startBuilder = new AlertDialog.Builder(
@@ -217,11 +220,11 @@ public class PlayActivity extends AppCompatActivity {
                 setTimer(totalTime);
             }
         });
-        //AlertDialog startAlert = startBuilder.create();
         startBuilder.show();
     }
 
-    // set all components to visible
+    // set all components to visible (during the welcome dialog, these objects are
+    // invisible because they can be a distraction in the background)
     public void makeUIVisible() {
         wordToRhymeWithTV.setVisibility(View.VISIBLE);
         timerTV.setVisibility(View.VISIBLE);
@@ -234,7 +237,8 @@ public class PlayActivity extends AppCompatActivity {
         infoTV.setVisibility(View.VISIBLE);
     }
 
-    // set all components to visible
+    // set all components to invisible (when the time's up, the end dialog shows up
+    // and the objects should be invisible again to prevent distractions)
     public void makeUIInVisible() {
         wordToRhymeWithTV.setVisibility(View.INVISIBLE);
         timerTV.setVisibility(View.INVISIBLE);
@@ -248,12 +252,12 @@ public class PlayActivity extends AppCompatActivity {
         infoTV.setVisibility(View.INVISIBLE);
     }
 
-    // set a timer corresponding to the level difficulty
+    // set a timer corresponding to the level's difficulty
     public void setTimer(long totalTime) {
 
         countDownTimer = new CountDownTimer(totalTime, 1000) {
 
-            // update UI
+            // update UI while the timer isn't finished
             public void onTick(long millisUntilFinished) {
                 remainingTime = millisUntilFinished;
                 String timerText = "" + millisUntilFinished / 1000 + "";
@@ -267,7 +271,8 @@ public class PlayActivity extends AppCompatActivity {
                 timerTV.setText(timerText);
             }
 
-            // when time's up, hide UI and show dialog
+            // when time's up, hide UI and show ending dialog,
+            // also check for achievements (and show using Toast if it applies)
             public void onFinish() {
                 timerTV.setText("0");
                 makeUIInVisible();
@@ -278,11 +283,14 @@ public class PlayActivity extends AppCompatActivity {
         }.start();
     }
 
+    /* The dialog shown when time's up. Let the user see their score and amount
+     * of words correctly guessed (if they guessed at least one word).
+     * Give them the option to return to Main Menu or challenge a fried (currently NOT working).
+     * Challenging a friend will probably be replaced by some other button like "see scores".
+     */
     public void showEndingDialog() {
-
         AlertDialog.Builder finishBuilder = new AlertDialog.Builder(
                 new ContextThemeWrapper(this, R.style.AlertDialogCustom));
-
         finishBuilder.setTitle("Time's up!");
         if (totalRhymeWordsFound > 1) {
             finishBuilder.setMessage("You found " + totalRhymeWordsFound +
@@ -306,14 +314,14 @@ public class PlayActivity extends AppCompatActivity {
                 // your score and amount of words
             }
         });
-        //AlertDialog finishAlert = finishBuilder.create();
         finishBuilder.show();
     }
 
     /* This method calls the API with the word to be rhymed with and gets a String with
      * all rhyme words (if everything went OK). This is first transformed to a JSONObject,
      * then to a JSONArray, and finally to an ArrayList of RhymeWords.
-     * This is used to check whether the user has a correct input.
+     * This is used to check whether the user has a correct input during the game and also
+     * to assign the correct scores.
      */
     public void getAllRhymes() {
         MyAsyncTask movieAsyncTask = new MyAsyncTask(this);
@@ -328,9 +336,9 @@ public class PlayActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        // if no results (so API went wrong), go back to PlayOverviewActivity
         if (searchResults.length() == 0 || searchResults.equals("[]")) {
             Toast.makeText(this, "No data was found", Toast.LENGTH_SHORT).show();
-            // go back to PlayOverviewActivity
             Intent goToPlayOverviewActivity = new Intent(getApplicationContext(),
                     PlayOverviewActivity.class);
             startActivity(goToPlayOverviewActivity);
@@ -351,7 +359,7 @@ public class PlayActivity extends AppCompatActivity {
 
                     if (currentObject.has("score")) {
                         score = currentObject.optInt("score", 0);
-                        score = score / rhymeWordsJSON.length() * 10;
+                        score = score / rhymeWordsJSON.length() * 10; // normalize score
                     }
 
                     if (currentObject.has("numSyllables")) {
@@ -367,22 +375,21 @@ public class PlayActivity extends AppCompatActivity {
         }
     }
 
-    // whenever a user clicks on the button, match input with allRhymeWords
-    // based on this give positive or negative feedback and update UI and DB
+    /* Whenever a user clicks on the 'check' button, match input with allRhymeWords ArrayList.
+     * Based on this give positive or negative feedback and update alreadyGuessed ArrayList
+     * (used for the ending of the level for correct score AND UI).
+     */
     public void validateUserInput(View view) {
-        // get current user input
-        currentWord = currentWordET.getText().toString();
-        System.out.print("Current word: " + currentWord);
+        currentWord = currentWordET.getText().toString(); // get current user input
 
         if (currentWord.length() != 0) {
             boolean wordMatchBool = false;
             boolean alreadyGuessedBool = false;
-            System.out.print("Current word: " + currentWord);
+
             for (int i = 0; i < allRhymeWords.size(); i++) {
-                System.out.print("i=" + i + ": " + allRhymeWords.get(i));
                 if (allRhymeWords.get(i).word.equals(currentWord)) {
-                    // if word is not in database, add it and increment score
-                    // otherwise, notify that they already guessed this one
+                    // if word is not in database, add it and increment totalScore
+                    // otherwise, notify that they already guessed this one (no cheating!)
                     if (!alreadyGuessed.contains(currentWord)) {
                         alreadyGuessed.add(currentWord);
                         currentScore = allRhymeWords.get(i).score;
@@ -397,7 +404,7 @@ public class PlayActivity extends AppCompatActivity {
                 }
             }
 
-            // customized Toast
+            // customized LinearLayout/TextView for Toast
             LinearLayout layout = new LinearLayout(this);
             TextView tv = new TextView(this);
             tv.setTextColor(Color.WHITE);
@@ -417,10 +424,11 @@ public class PlayActivity extends AppCompatActivity {
             } else {
                 // word incorrectly guessed
                 layout.setBackgroundResource(R.color.inCorrectWordToast);
-                tv.setText("Unfortunately, that doesn't rhyme.");
+                tv.setText("Unfortunately, \'" + currentWord + "\' doesn't rhyme.");
             }
             layout.addView(tv);
 
+            // Toast settings
             Toast toast = new Toast(this);
             toast.setView(layout);
             toast.setGravity(Gravity.TOP, 0, 0);
@@ -430,22 +438,26 @@ public class PlayActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Please enter a word", Toast.LENGTH_SHORT).show();
         }
-
     }
 
-
-
     @Override
+    // when the back button is pressed, let user confirm they want to leave
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             countDownTimer.cancel(); // pause timer
-            long time = remainingTime;
-            showLeavingDialog(remainingTime);
+            showLeavingDialog(remainingTime); // show 'are you sure you want to leave'-dialog
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
+    /* This dialog is shown when the user wants to leave during the game
+     * (by pressing the back button twice). A message shows up, asking whether the user
+     * is sure it wants to leave the game. During the dialog the timer is 'paused':
+     * the timer is destroyed, remaining time is stored and a new timer is created when
+     * the user decides it wants to play further.
+     * Otherwise, they will go back to the Main Menu and their game is lost.
+     */
     public void showLeavingDialog(final long remainingTime) {
         AlertDialog.Builder leaveBuilder = new AlertDialog.Builder(
                 new ContextThemeWrapper(this, R.style.AlertDialogCustom));
@@ -469,13 +481,13 @@ public class PlayActivity extends AppCompatActivity {
                 finish();
             }
         });
-        //AlertDialog leaveAlert = startBuilder.create();
         leaveBuilder.show();
     }
 
     /* This method looks which achievements are already unlocked,
      * and for the ones that are still unlocked, check whether they are unlocked
-     * during this game. If they are unlocked, show message and add to achievemens.
+     * during (i.e. when finishing) this game. If they are unlocked by their score,
+     * show customized Toast and add to achievements (SharedPreferences).
      */
     public void checkForAchievements() {
         // get SharedPreferences
@@ -486,7 +498,7 @@ public class PlayActivity extends AppCompatActivity {
         boolean A4Completed = shared.getBoolean("A4Unlocked", false);
         boolean A5Completed = shared.getBoolean("A5Unlocked", false);
 
-        // customized Toast
+        // customized LinearLayout/TextView for Toast
         LinearLayout layout = new LinearLayout(this);
         TextView tv = new TextView(this);
         tv.setTextColor(Color.BLACK);
@@ -496,31 +508,29 @@ public class PlayActivity extends AppCompatActivity {
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
         tv.setGravity(Gravity.CENTER_VERTICAL);
 
-        // save to SharedPreferences
+        // create SharedPreferences editor to save
         SharedPreferences.Editor editor = getSharedPreferences(
                 "SharedPreferences", MODE_PRIVATE).edit();
 
+        // if achievement 1 still locked...
         if (!A1Completed) {
-            // if stage = easy & words >= 10, unlock "Easy Complication"
+            // and if stage = easy & words >= 10, unlock "Easy Complication"
             if (stage.equals("easy") && totalRhymeWordsFound >= 10) {
                 editor.putBoolean("A1Unlocked", true); // save to SharedPreferences
-
-                // give Toast
-                layout.setBackgroundResource(R.color.A1Color);
+                layout.setBackgroundResource(R.color.A1Color); // give Toast
                 tv.setText("Congratulations! You unlocked \n" +
                         "\'Easy Complication\' \n " +
                         "You found " + totalRhymeWordsFound + " words in Easy mode." +
-                        "Easy peasy ha?");
+                        "Easy Peasy huh?");
             }
         }
 
+        // if achievement 2 still locked...
         if (!A2Completed) {
-            // if found >= 1 rhyme word in every stage, unlock "The Gentlest Experimentalist"
+            // and if found >= 1 rhyme word in every stage, unlock "The Gentlest Experimentalist"
             if (true) {
                 editor.putBoolean("A2Unlocked", true); // save to SharedPreferences
-
-                // give Toast
-                layout.setBackgroundResource(R.color.A2Color);
+                layout.setBackgroundResource(R.color.A2Color); // give Toast
                 tv.setText("Congratulations! You unlocked \n" +
                         "\'The Gentlest Experimentalist\' \n " +
                         "You found at least one rhyme word in every stage." +
@@ -528,27 +538,24 @@ public class PlayActivity extends AppCompatActivity {
             }
         }
 
+        // if achievement 3 still locked...
         if (!A3Completed) {
-            // if score >= 1001, unlock "1001 Nights of Practice"
+            // and if score >= 1001, unlock "1001 Nights of Practice"
             if (totalScore >= 1001) {
                 editor.putBoolean("A3Unlocked", true); // save to SharedPreferences
-
-                // give Toast
-                layout.setBackgroundResource(R.color.A3Color);
+                layout.setBackgroundResource(R.color.A3Color); // give Toast
                 tv.setText("Congratulations! You unlocked \n" +
                         "\'1001 Nights of Practice\' \n " +
                         "You scored " + totalScore + "points. Nice!");
             }
         }
 
+        // if achievement 4 still locked...
         if (!A4Completed) {
-            // if stage = hard & words >= 6, unlock "Shaky Spears!"
+            // and if stage = hard & words >= 6, unlock "Shaky Spears!"
             if (stage.equals("hard") && totalRhymeWordsFound >= 6) {
-                // give Toast
                 editor.putBoolean("A4Unlocked", true); // save to SharedPreferences
-
-                // give Toast
-                layout.setBackgroundResource(R.color.A4Color);
+                layout.setBackgroundResource(R.color.A4Color); // give Toast
                 tv.setText("Congratulations! You unlocked \n" +
                         "\'Shaky Spears!\' \n " +
                         "You found " + totalRhymeWordsFound +
@@ -556,13 +563,12 @@ public class PlayActivity extends AppCompatActivity {
             }
         }
 
+        // if achievement 5 still locked...
         if (!A5Completed) {
-            // if stage = insane & words >= 8, unlock "You should be a rapper :-)"
+            // and if stage = insane & words >= 8, unlock "You should be a rapper :-)"
             if (stage.equals("insane") && totalRhymeWordsFound >= 8) {
                 editor.putBoolean("A5Unlocked", true); // save to SharedPreferences
-
-                // give Toast
-                layout.setBackgroundResource(R.color.A5Color);
+                layout.setBackgroundResource(R.color.A5Color); // give Toast
                 tv.setText("Congratulations! You unlocked \n" +
                         "\'You should be a rapper :-)\' \n " +
                         "You found " + totalRhymeWordsFound +
@@ -571,7 +577,7 @@ public class PlayActivity extends AppCompatActivity {
         }
         editor.apply();
 
-        // customized toast
+        // Toast settings
         layout.addView(tv);
         final Toast toast = new Toast(this);
         toast.setView(layout);
@@ -579,19 +585,21 @@ public class PlayActivity extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_LONG);
         toast.show();
 
+        // Toast.LENGTH_LONG is 3.5 seconds, which is a little too short, so we'll double this
         new CountDownTimer(3500, 1000)
         {
-
             public void onTick(long millisUntilFinished) {toast.show();}
             public void onFinish() {toast.show();}
 
         }.start();
     }
 
+    // necessary?
     public void onDestroy() {
         super.onDestroy();
     }
 
+    // THIS CODE IS NOT READY YET
     //public static void hideSoftKeyboard(Activity activity) {
     //    InputMethodManager inputMethodManager =
     //            (InputMethodManager) activity.getSystemService(
@@ -599,4 +607,17 @@ public class PlayActivity extends AppCompatActivity {
     //    inputMethodManager.hideSoftInputFromWindow(
     //            activity.getCurrentFocus().getWindowToken(), 0);
     //}
+
+    // THIS CODE IS NOT READY YET
+    public void saveScoreToDB() {
+        // create new score object with the correct variables
+        Score score = new Score("test_username",
+                totalScore,
+                totalRhymeWordsFound,
+                stage,
+                theRhymeWord,
+                alreadyGuessed);
+
+        // save score object to database
+    }
 }
