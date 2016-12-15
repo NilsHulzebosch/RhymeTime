@@ -163,4 +163,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             mFirebaseAuth.removeAuthStateListener(authListener);
         }
     }
+
+    public void skipSignIn(View view) {
+        Intent goToMainActivity = new Intent(this, MainActivity.class);
+        goToMainActivity.putExtra("anonymous", true);
+        startActivity(goToMainActivity);
+    }
 }

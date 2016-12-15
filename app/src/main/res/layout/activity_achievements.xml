@@ -91,7 +91,7 @@ android:layout_height="wrap_content">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text="Rhymed 6 or more words in /'Hard/' mode"
+        android:text="Rhymed 6 or more words in \'Hard\' mode"
         android:id="@+id/A4Text"
         style="@style/achievementText" />
 
@@ -111,7 +111,7 @@ android:layout_height="wrap_content">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text="Rhymed 8 or more words in /'Insane/' mode"
+        android:text="Rhymed 8 or more words in \'Insane\' mode"
         android:id="@+id/A5Text"
         style="@style/achievementText" />
 

@@ -10,16 +10,64 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.nils.rhymetime.SignInActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/singInInstructionsTV1"
+        android:text="Please sign in using your Google account."
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/singInInstructionsTV2"
+        android:layout_below="@id/singInInstructionsTV1"
+        android:text="When signing in, your scores will be added to the global leaderboard."
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
+
     <com.google.android.gms.common.SignInButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/sign_in_button">
-
+        android:id="@+id/sign_in_button"
+        android:layout_below="@id/singInInstructionsTV2"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true" >
     </com.google.android.gms.common.SignInButton>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/mStatusTextView"/>
+        android:id="@+id/mStatusTextView"
+        android:layout_below="@id/sign_in_button"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/singInInstructions3TV"
+        android:text="You can also proceed without signing in."
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/mStatusTextView"
+        android:layout_marginTop="200dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/singInInstructions4TV"
+        android:text="Your scores will be added under the name \'anonymous\'."
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/singInInstructions3TV"
+        android:layout_marginTop="10dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Skip sign-in"
+        android:layout_below="@id/singInInstructions4TV"
+        android:layout_marginTop="10dp"
+        android:onClick="skipSignIn"/>
 
 </RelativeLayout>

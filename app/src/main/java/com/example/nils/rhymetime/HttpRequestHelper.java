@@ -12,7 +12,7 @@ public class HttpRequestHelper {
 
     // make string for URL
     private static final String rhymeWordURL = "https://api.datamuse.com/words?rel_rhy=";
-    private static final String randomWordURL = "http://www.setgetgo.com/randomword/get.php";
+    private static final String randomWordURL = "http://www.setgetgo.com/randomword/get.php?len=4";
 
     // method to download from server
     protected static String downloadFromServer(String... params) {

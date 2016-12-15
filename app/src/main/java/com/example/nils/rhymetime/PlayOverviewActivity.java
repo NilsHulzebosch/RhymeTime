@@ -56,10 +56,6 @@ public class PlayOverviewActivity extends AppCompatActivity {
             button.setTextColor(Color.parseColor("#21FE80"));
             button.setAllCaps(true);
         }
-        if (L5Completed) {
-            button = (Button) findViewById(R.id.play5Button);
-            button.setTextColor(Color.parseColor("#21FE80"));
-        }
     }
 
     // when a user clicks a level button, go to the PlayActivity

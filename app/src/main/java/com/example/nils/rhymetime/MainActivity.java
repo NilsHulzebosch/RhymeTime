@@ -8,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -20,28 +22,43 @@ public class MainActivity extends AppCompatActivity {
     private String userID;
     private String username;
 
+    private Button singInOrOutButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         TextView welcomeTV = (TextView) findViewById(R.id.welcomeTV);
+        singInOrOutButton = (Button) findViewById(R.id.singInOrOutButton);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
-        if (firebaseUser == null) {
-            Intent startSignIn = new Intent(this, SignInActivity.class);
-            startActivity(startSignIn);
-        } else {
-            userID = firebaseUser.getUid();
-            System.out.println("USERID: " + userID);
-
-            username = firebaseUser.getDisplayName();
-            String welcomeStr = "Welcome back, " + username;
-            welcomeTV.setText(welcomeStr);
+        Bundle extras = getIntent().getExtras();
+        Boolean anonymous = false;
+        if (extras != null){
+            anonymous = extras.getBoolean("anonymous", false);
         }
 
-        //firebaseAuth.signOut(); // sign out
+        if (anonymous) {
+            username = "anonymous";
+            welcomeTV.setText("Welcome, anonymous.");
+            singInOrOutButton.setText("Sign in");
+        } else {
+            firebaseAuth = FirebaseAuth.getInstance();
+            firebaseUser = firebaseAuth.getCurrentUser();
+            if (firebaseUser == null) {
+                Intent startSignIn = new Intent(this, SignInActivity.class);
+                startActivity(startSignIn);
+            } else {
+                userID = firebaseUser.getUid();
+                System.out.println("USER ID: " + userID);
+
+                username = firebaseUser.getDisplayName();
+                String welcomeStr = "Signed in as " + username;
+                welcomeTV.setText(welcomeStr);
+
+                singInOrOutButton.setText("Sign out");
+            }
+        }
 
         // if the user plays the game for the first time, show instruction screens
         SharedPreferences shared = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
@@ -144,13 +161,28 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToAchievements(View view) {
         Intent goToAchievements = new Intent(this, AchievementsActivity.class);
-        goToAchievements.putExtra("username", username);
         startActivity(goToAchievements);
     }
 
     public void goToInstructions(View view) {
         Intent goToInstructions = new Intent(this, InstructionsActivity.class);
-        goToInstructions.putExtra("username", username);
         startActivity(goToInstructions);
+    }
+
+    public void singInOrOut(View view) {
+        if (singInOrOutButton.getText().equals("Sign out")) {
+            FirebaseAuth.getInstance().signOut();
+            Intent refresh = new Intent(this, MainActivity.class);
+            refresh.putExtra("anonymous", true);
+            startActivity(refresh);
+            finish();
+        } else {
+            firebaseAuth = FirebaseAuth.getInstance();
+            firebaseUser = firebaseAuth.getCurrentUser();
+            if (firebaseUser == null) {
+                Intent startSignIn = new Intent(this, SignInActivity.class);
+                startActivity(startSignIn);
+            }
+        }
     }
 }

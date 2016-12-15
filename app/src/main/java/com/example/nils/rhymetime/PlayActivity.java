@@ -73,6 +73,8 @@ public class PlayActivity extends AppCompatActivity {
     private static String FIREBASE_URL = "https://rhymetime-b8195.firebaseio.com/";
     private String username;
 
+    private ArrayList<String> randomWords;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +107,11 @@ public class PlayActivity extends AppCompatActivity {
         totalScore = 0;
 
         Random rand = new Random();
-        int i = rand.nextInt((possibleWords.size()) + 1);
+        int i = rand.nextInt((possibleWords.size()));
         System.out.println("i is:" + i + "  and possibleWords is " + possibleWords);
         theRhymeWord = possibleWords.get(i);
+
+
     }
 
     /* This method sets the correct time and the possible words list,
@@ -117,19 +121,17 @@ public class PlayActivity extends AppCompatActivity {
      */
     public void setTimeAndPossibleWords() {
         possibleWords = new ArrayList<>();
+        minSyllables = 0;
+        maxSyllables = 25;
         switch (stage) {
             case "easy":
                 totalTime = 70000;
                 possibleWords = Arrays.asList("sing", "cool", "boat", "plant",
                         "cat", "walk", "blue", "pan", "brick", "fire");
-                minSyllables = 0;
-                maxSyllables = 25;
                 break;
             case "medium":
                 totalTime = 60000;
                 possibleWords = Arrays.asList("house", "sleep", "yellow");
-                minSyllables = 0;
-                maxSyllables = 25;
                 break;
             case "hard":
                 totalTime = 50000;
@@ -159,31 +161,14 @@ public class PlayActivity extends AppCompatActivity {
                     maxSyllables = 25;
                 } else {
                     possibleWords = Arrays.asList("babe", "against", "lyrics", "sullen",
-                            "gravity", "subtle", "colonel", "lettuce", "squirrel", "heighth");
+                            "gravity", "subtle", "colonel", "lettuce", "squirrel");
                     minSyllables = 0;
                     maxSyllables = 25;
                 }
                 break;
             default:
-                // the random stage, currently not working
                 totalTime = 60000;
-                MyAsyncTask movieAsyncTask = new MyAsyncTask(this);
-                movieAsyncTask.execute("randomWord");
-                String randomWordResult;
-                try {
-                    randomWordResult = movieAsyncTask.get();
-                } catch (InterruptedException | ExecutionException e) {
-                    randomWordResult = "";
-                    e.printStackTrace();
-                }
-
-                if (randomWordResult.length() == 0) {
-                    Toast.makeText(this, "No data was found", Toast.LENGTH_SHORT).show();
-                } else {
-                    minSyllables = 0;
-                    maxSyllables = 25;
-                    possibleWords = Arrays.asList(randomWordResult);
-                }
+                possibleWords = Arrays.asList("random", "john", "cena");
                 break;
         }
     }
@@ -217,6 +202,7 @@ public class PlayActivity extends AppCompatActivity {
                 // go back to PlayOverview
                 Intent goToPlayOverview = new Intent(getApplicationContext(),
                         PlayOverviewActivity.class);
+                goToPlayOverview.putExtra("username", username);
                 startActivity(goToPlayOverview);
                 finish();
             }
