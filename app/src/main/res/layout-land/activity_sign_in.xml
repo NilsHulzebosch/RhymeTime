@@ -24,33 +24,33 @@
             android:layout_height="wrap_content"
             android:id="@+id/singInInstructionsTV1"
             android:text="Please sign in using your Google account."
-            android:layout_marginTop="10dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"/>
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="163dp"
+            android:layout_marginStart="163dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/singInInstructionsTV2"
             android:text="When signing in, your scores will be added to the global leaderboard."
-            android:layout_marginTop="10dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp" />
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginStart="80dp" />
 
         <com.google.android.gms.common.SignInButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/sign_in_button"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="100dp"
-            android:layout_marginStart="100dp" >
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="233dp"
+            android:layout_marginStart="233dp" >
         </com.google.android.gms.common.SignInButton>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/mStatusTextView"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp" />
 
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="2dp"
             android:background="#666"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="0dp">
         </View>
 
         <TextView
@@ -66,18 +66,18 @@
             android:layout_height="wrap_content"
             android:id="@+id/singInInstructions3TV"
             android:text="You can also proceed without signing in."
-            android:layout_marginTop="30dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp" />
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="162dp"
+            android:layout_marginStart="162dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/singInInstructions4TV"
             android:text="Your scores will be added under the universal name \'anonymous\', along with all other non-signed-in players."
-            android:layout_marginTop="10dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp" />
+            android:layout_marginTop="3dp"
+            android:paddingLeft="133dp"
+            android:paddingRight="133dp"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -87,8 +87,8 @@
             android:textSize="12sp"
             android:padding="10dp"
             android:layout_marginTop="15dp"
-            android:layout_marginLeft="70dp"
-            android:layout_marginStart="70dp"
+            android:layout_marginLeft="190dp"
+            android:layout_marginStart="190dp"
             android:layout_marginBottom="10dp"
             android:onClick="skipSignIn"/>
 

@@ -170,12 +170,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void singInOrOut(View view) {
+        // sign out and 'refresh' by going to MainActivity again
         if (singInOrOutButton.getText().equals("Sign out")) {
             FirebaseAuth.getInstance().signOut();
             Intent refresh = new Intent(this, MainActivity.class);
             refresh.putExtra("anonymous", true);
             startActivity(refresh);
             finish();
+
+            // sign in by going to signInActivity
         } else {
             firebaseAuth = FirebaseAuth.getInstance();
             firebaseUser = firebaseAuth.getCurrentUser();
