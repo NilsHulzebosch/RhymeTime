@@ -22,6 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,6 +70,10 @@ public class PlayActivity extends AppCompatActivity {
 
     private CountDownTimer countDownTimer;
 
+    private static String FIREBASE_URL = "https://rhymetime-b8195.firebaseio.com/";
+    private String username;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +81,7 @@ public class PlayActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         stage = extras.getString("stage");
+        username = extras.getString("username", "anonymous");
 
         setTimeAndPossibleWords();
         initializeParameters();
@@ -271,13 +278,13 @@ public class PlayActivity extends AppCompatActivity {
                 timerTV.setText(timerText);
             }
 
-            // when time's up, hide UI and show ending dialog,
-            // also check for achievements (and show using Toast if it applies)
+            // when time's up...
             public void onFinish() {
                 timerTV.setText("0");
-                makeUIInVisible();
-                showEndingDialog();
-                checkForAchievements();
+                makeUIInVisible(); // hide UI
+                saveScoreToDB(); // save score to FireBase database
+                showEndingDialog(); // show how their game went
+                checkForAchievements(); // if it applies, show achievements
             }
 
         }.start();
@@ -611,7 +618,7 @@ public class PlayActivity extends AppCompatActivity {
     // THIS CODE IS NOT READY YET
     public void saveScoreToDB() {
         // create new score object with the correct variables
-        Score score = new Score("test_username",
+        Score score = new Score("hello",
                 totalScore,
                 totalRhymeWordsFound,
                 stage,
@@ -619,5 +626,9 @@ public class PlayActivity extends AppCompatActivity {
                 alreadyGuessed);
 
         // save score object to database
+        Firebase.setAndroidContext(this);
+        Firebase ref = new Firebase(FIREBASE_URL);
+        Firebase newRef = ref.child("Scores").push();
+        newRef.setValue(score);
     }
 }

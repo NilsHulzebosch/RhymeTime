@@ -1,7 +1,6 @@
 package com.example.nils.rhymetime;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,49 +8,40 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.firebase.client.Firebase;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static String FIREBASE_URL = "https://rhymetime-b8195.firebaseio.com/";
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
+    private String userID;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Firebase.setAndroidContext(this);
-        Firebase ref = new Firebase(FIREBASE_URL);
-        Firebase newRef = ref.child("Score").push();
+        TextView welcomeTV = (TextView) findViewById(R.id.welcomeTV);
 
-        ArrayList<String> testArrayList = new ArrayList<>();
-        // create new score object with the correct variables
-        Score score1 = new Score("test_username",
-                800,
-                8,
-                "Medium",
-                "testWord2",
-                testArrayList);
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        if (firebaseUser == null) {
+            Intent startSignIn = new Intent(this, SignInActivity.class);
+            startActivity(startSignIn);
+        } else {
+            userID = firebaseUser.getUid();
+            System.out.println("USERID: " + userID);
 
-        //newRef.child("Score").setValue(score1);
-        //newRef.child("Score").setValue(score2);
+            username = firebaseUser.getDisplayName();
+            String welcomeStr = "Welcome back, " + username;
+            welcomeTV.setText(welcomeStr);
+        }
 
-        newRef.setValue(score1);
+        //firebaseAuth.signOut(); // sign out
 
         // if the user plays the game for the first time, show instruction screens
         SharedPreferences shared = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
@@ -126,27 +116,41 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
+    /* This method turns the full name of the user into the first name only.
+     * This is for UI purposes when showing the scores. Of course it is better to have
+     * a username instead of someone's real name to prevent duplicates, but for now
+     * his will suffices (also because the people that will play this game will
+     * not have the same name, because only a handful of people (I know) will play it).
+     */
+    public void getFirstName() {
+
+    }
+
     /* Intents for the four activities
      * No finish() because the MainActivity (Main Menu) is the fallback place
      * where the user goes to when clicking the back button.
      */
     public void goToPlayOverview(View view) {
         Intent goToPlayOverview = new Intent(this, PlayOverviewActivity.class);
+        goToPlayOverview.putExtra("username", username);
         startActivity(goToPlayOverview);
     }
 
     public void goToScoreOverview(View view) {
         Intent goToScoreOverview = new Intent(this, ScoreOverviewActivity.class);
+        goToScoreOverview.putExtra("username", username);
         startActivity(goToScoreOverview);
     }
 
     public void goToAchievements(View view) {
         Intent goToAchievements = new Intent(this, AchievementsActivity.class);
+        goToAchievements.putExtra("username", username);
         startActivity(goToAchievements);
     }
 
     public void goToInstructions(View view) {
         Intent goToInstructions = new Intent(this, InstructionsActivity.class);
+        goToInstructions.putExtra("username", username);
         startActivity(goToInstructions);
     }
 }

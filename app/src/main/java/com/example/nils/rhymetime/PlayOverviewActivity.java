@@ -14,10 +14,15 @@ import android.widget.Toast;
 
 public class PlayOverviewActivity extends AppCompatActivity {
 
+    private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_overview);
+
+        Bundle extras = getIntent().getExtras();
+        username = extras.getString("username", "anonymous");
     }
 
     // this method shows a check-mark next to all completed levels
@@ -65,6 +70,7 @@ public class PlayOverviewActivity extends AppCompatActivity {
         if (isNetworkAvailable()) {
             Intent goToPlay = new Intent(this, PlayActivity.class);
             goToPlay.putExtra("stage", buttonText);
+            goToPlay.putExtra("username", username);
             startActivity(goToPlay);
             finish();
         } else {

@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import static java.util.logging.Level.parse;
 
@@ -37,14 +38,39 @@ public class ScoreOverviewActivity extends AppCompatActivity {
 
         scoreArrayList = new ArrayList<>();
         setAdapter();
+        addTESTListener();
+    }
 
-        // get FireBase reference
-        Firebase ref = new Firebase(FIREBASE_URL);
+    public void addListener() {
+        Firebase.setAndroidContext(this); // set context
+        Firebase ref = new Firebase(FIREBASE_URL); // get FireBase reference
+
+        /*
+        Button refreshButton = (Button) findViewById(R.id.refreshButton);
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                     @Override
+                     public void onDataChange(DataSnapshot snapshot) {
+                         // do some stuff once
+                     }
+
+                     @Override
+                     public void onCancelled(FirebaseError firebaseError) {
+                         System.out.println("The read failed: " + firebaseError.getMessage());
+                     }
+                 });
+             }
+         });
+         */
 
         // value event listener for real-time data update
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+
+                scoreArrayList.clear();
                 System.out.println("There are " + snapshot.getChildrenCount() + " children");
 
                 for (DataSnapshot child : snapshot.getChildren()) {
@@ -71,6 +97,12 @@ public class ScoreOverviewActivity extends AppCompatActivity {
                                     rhymeWord,
                                     listOfRhymedWords);
 
+                            //for (int i = 0; i < scoreArrayList.size(); ) {
+                            //    if (scoreObject.score >= scoreArrayList.get(i).score) {
+                            //        scoreArrayList.add(i, scoreObject);
+                            //        break;
+                            //    }
+                            //}
                             scoreArrayList.add(scoreObject);
 
                         } catch (JSONException e1) {
@@ -78,6 +110,7 @@ public class ScoreOverviewActivity extends AppCompatActivity {
                         }
                     }
                 }
+                //sortScores();
                 scoresList.notifyDataSetChanged(); // update ArrayAdapter
             }
 
@@ -86,6 +119,76 @@ public class ScoreOverviewActivity extends AppCompatActivity {
                 System.out.println("The read failed: " + firebaseError.getMessage());
             }
         });
+    }
+
+    public void addTESTListener() {
+        Firebase.setAndroidContext(this); // set context
+        final Firebase ref = new Firebase(FIREBASE_URL); // get FireBase reference
+
+        Button refreshButton = (Button) findViewById(R.id.refreshButton);
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        // do some stuff once
+                        scoreArrayList.clear();
+                        System.out.println("There are " + snapshot.getChildrenCount() + " children");
+
+                        for (DataSnapshot child : snapshot.getChildren()) {
+
+                            System.out.println("There are " + child.getChildrenCount() + " grandchildren");
+                            for (DataSnapshot scoreChild : child.getChildren()) {
+
+                                String scoreObj = scoreChild.getValue().toString();
+
+                                try {
+                                    JSONObject jsonObj = new JSONObject(scoreObj);
+
+                                    String username = jsonObj.optString("username", "unknown");
+                                    int score = jsonObj.optInt("score", 0);
+                                    int wordsAmount = jsonObj.optInt("wordsAmount", 0);
+                                    String difficulty = jsonObj.optString("difficulty", "unknown");
+                                    String rhymeWord = jsonObj.optString("rhymeWord", "unknown");
+                                    ArrayList<String> listOfRhymedWords = new ArrayList<>();
+
+                                    Score scoreObject = new Score(username,
+                                            score,
+                                            wordsAmount,
+                                            difficulty,
+                                            rhymeWord,
+                                            listOfRhymedWords);
+
+                                    //for (int i = 0; i < scoreArrayList.size(); ) {
+                                    //    if (scoreObject.score >= scoreArrayList.get(i).score) {
+                                    //        scoreArrayList.add(i, scoreObject);
+                                    //        break;
+                                    //    }
+                                    //}
+                                    scoreArrayList.add(scoreObject);
+
+                                } catch (JSONException e1) {
+                                    e1.printStackTrace();
+                                }
+                            }
+                        }
+                        //sortScores();
+                        scoresList.notifyDataSetChanged(); // update ArrayAdapter
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                        System.out.println("The read failed: " + firebaseError.getMessage());
+                    }
+                });
+            }
+        });
+    }
+
+    // this method sorts all Score objects based on their score from largest to smallest
+    public void sortScores() {
+
     }
 
     public void setAdapter() {
