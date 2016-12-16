@@ -52,3 +52,6 @@ Of course this is a demo version, because we only had 2 weeks. But in the future
 - more achievements
 - unique username
 - challenging a friend
+
+## Screenshot 1
+![rhymetime1](https://cloud.githubusercontent.com/assets/16048199/21280915/483be416-c3e9-11e6-989b-e472ebc8b28b.jpg)
