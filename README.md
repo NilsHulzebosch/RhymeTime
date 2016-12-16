@@ -5,7 +5,9 @@ Name: Nils Hulzebosch
 Student ID: 10749411   
 Assignment: pset6 (final app)   
 Date: December 16th, 2016.   
+App name: RhymeTime   
 Info: This android app is my final app for the course Native App Studio from the University of Amsterdam.   
+
 
 ## App info
 RhymeTime is a simple game where players have to rhyme as much words as possible within a given time.
@@ -21,7 +23,7 @@ Players can also see the global leaderboard: the scores of all players, includin
 
 ## Main requirements for this app:
 - The app concept should be centered around a live open data API.   
-Check: the main gameplay is based on the Datamuse API, which can be used for searching rhymes but also other linguistic information.
+Check: the main gameplay is based on the Datamuse API, used to find rhyme words.
 
 - External data should be retrieved using HTTP-requests.   
 Check: requesting all rhymewords.
