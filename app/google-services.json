@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "79421926564",
+    "firebase_url": "https://rhymetime-b8195.firebaseio.com",
+    "project_id": "rhymetime-b8195",
+    "storage_bucket": "rhymetime-b8195.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79421926564:android:eccd2cc9143aac3e",
+        "android_client_info": {
+          "package_name": "com.example.nils.rhymetime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "79421926564-qi08gi7d4cdhe0gmdcdq8sbl2bgqrrtv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyIyecv2COm6m_725lO55NSKAc-O2GLjU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
