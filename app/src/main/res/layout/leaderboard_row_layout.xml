@@ -7,7 +7,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#000">
+        android:background="@color/black">
 
         <TableRow>
             <TextView
@@ -16,12 +16,12 @@
                 android:id="@+id/scoreTextView"
                 android:textSize="16sp"
                 android:padding="10dp"
-                android:textColor="#FFF"/>
+                android:textColor="@color/white"/>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="wrap_content"
-                android:background="#666">
+                android:background="@color/generalBackground">
             </View>
 
             <TextView
@@ -30,12 +30,12 @@
                 android:id="@+id/wordsAmountTextView"
                 android:textSize="16sp"
                 android:padding="10dp"
-                android:textColor="#FFF"/>
+                android:textColor="@color/white"/>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="wrap_content"
-                android:background="#666">
+                android:background="@color/generalBackground">
             </View>
 
             <TextView
@@ -44,12 +44,12 @@
                 android:id="@+id/difficultyTextView"
                 android:textSize="16sp"
                 android:padding="10dp"
-                android:textColor="#FFF"/>
+                android:textColor="@color/white"/>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="wrap_content"
-                android:background="#666">
+                android:background="@color/generalBackground">
             </View>
 
             <TextView
@@ -58,7 +58,7 @@
                 android:id="@+id/usernameTextView"
                 android:textSize="16sp"
                 android:padding="10dp"
-                android:textColor="#FFF"/>
+                android:textColor="@color/white"/>
 
         </TableRow>
     </TableLayout>

@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#666"
+    android:background="@color/generalBackground"
     tools:context="com.example.nils.rhymetime.SignInActivity">
 
     <LinearLayout
@@ -17,13 +17,13 @@
         android:orientation="vertical"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:background="#FFF">
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/singInInstructionsTV1"
-            android:text="Please sign in using your Google account."
+            android:text="@string/please_sign_in_using_your_google_account"
             android:layout_marginTop="10dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"/>
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/singInInstructionsTV2"
-            android:text="When signing in, your scores will be added to the global leaderboard."
+            android:text="@string/when_signing_in_your_scores_will_be_added_to_the_global_leaderboard"
             android:layout_marginTop="10dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp" />
@@ -57,7 +57,7 @@
         <View
             android:layout_width="wrap_content"
             android:layout_height="2dp"
-            android:background="#666"
+            android:background="@color/generalBackground"
             android:layout_marginTop="10dp">
         </View>
 
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/singInInstructions3TV"
-            android:text="You can also proceed without signing in."
+            android:text="@string/you_can_also_proceed_without_signing_in"
             android:layout_marginTop="30dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp" />
@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/singInInstructions4TV"
-            android:text="Your scores will be added under the universal name \'anonymous\', along with all other non-signed-in players."
+            android:text="@string/your_scores_will_be_added_under_the_universal_name_anonymous_along_with_all_other_non_signed_in_players"
             android:layout_marginTop="10dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp" />
@@ -82,8 +82,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:background="#FFF"
-            android:text="Proceed without signing in"
+            android:background="@color/white"
+            android:text="@string/proceed_without_signing_in"
             android:textSize="12sp"
             android:padding="10dp"
             android:layout_marginTop="15dp"

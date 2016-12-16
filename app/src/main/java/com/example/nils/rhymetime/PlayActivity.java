@@ -492,27 +492,27 @@ public class PlayActivity extends AppCompatActivity {
 
         // if achievement 1 still locked...
         if (!A1Completed) {
-            // and if stage = easy & words >= 10, unlock "Easy Complication"
-            if (stage.equals("easy") && totalRhymeWordsFound >= 10) {
-                editor.putBoolean("A1Unlocked", true); // save to SharedPreferences
-                layout.setBackgroundResource(R.color.A1Color); // give Toast
-                tv.setText("Congratulations! You unlocked \n" +
-                        "\'Easy Complication\' \n " +
-                        "You found " + totalRhymeWordsFound + " words in Easy mode." +
-                        "Easy Peasy huh?");
-            }
-        }
-
-        // if achievement 2 still locked...
-        if (!A2Completed) {
-            // and if found >= 1 rhyme word in every stage, unlock "The Gentlest Experimentalist"
+            // if game is finished, unlock "The Gentlest Experimentalist"
             if (true) {
-                editor.putBoolean("A2Unlocked", true); // save to SharedPreferences
+                editor.putBoolean("A1Unlocked", true); // save to SharedPreferences
                 layout.setBackgroundResource(R.color.A2Color); // give Toast
                 tv.setText("Congratulations! You unlocked \n" +
                         "\'The Gentlest Experimentalist\' \n " +
                         "You found at least one rhyme word in every stage." +
                         "Keep up the good work!");
+            }
+        }
+
+        // if achievement 2 still locked...
+        if (!A2Completed) {
+            // and if stage = easy & words >= 10, unlock "Easy Complication"
+            if (stage.equals("easy") && totalRhymeWordsFound >= 10) {
+                editor.putBoolean("A2Unlocked", true); // save to SharedPreferences
+                layout.setBackgroundResource(R.color.A1Color); // give Toast
+                tv.setText("Congratulations! You unlocked \n" +
+                        "\'Easy Complication\' \n " +
+                        "You found " + totalRhymeWordsFound + " words in Easy mode." +
+                        "Easy Peasy huh?");
             }
         }
 

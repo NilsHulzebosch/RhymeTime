@@ -9,6 +9,6 @@
         android:id="@+id/textView1"
         android:textSize="19sp"
         android:padding="15dp"
-        android:textColor="#000"/>
+        android:textColor="@color/black"/>
 
 </LinearLayout>

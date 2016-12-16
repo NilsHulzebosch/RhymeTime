@@ -18,46 +18,28 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
-    private String userID;
     private String username;
+    private boolean anonymous;
 
+    private TextView welcomeTV;
     private Button singInOrOutButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView welcomeTV = (TextView) findViewById(R.id.welcomeTV);
+        welcomeTV = (TextView) findViewById(R.id.welcomeTV);
         singInOrOutButton = (Button) findViewById(R.id.singInOrOutButton);
 
         Bundle extras = getIntent().getExtras();
-        Boolean anonymous = false;
+        anonymous = false;
         if (extras != null){
             anonymous = extras.getBoolean("anonymous", false);
         }
 
-        if (anonymous) {
-            username = "anonymous";
-            welcomeTV.setText("Welcome, anonymous.");
-            singInOrOutButton.setText("Sign in");
-        } else {
-            firebaseAuth = FirebaseAuth.getInstance();
-            firebaseUser = firebaseAuth.getCurrentUser();
-            if (firebaseUser == null) {
-                Intent startSignIn = new Intent(this, SignInActivity.class);
-                startActivity(startSignIn);
-            } else {
-                userID = firebaseUser.getUid();
-                System.out.println("USER ID: " + userID);
-
-                username = getFirstName(firebaseUser.getDisplayName());
-                String welcomeStr = "Signed in as " + username;
-                welcomeTV.setText(welcomeStr);
-
-                singInOrOutButton.setText("Sign out");
-            }
-        }
+        handleAuthentication();
 
         // if the user plays the game for the first time, show instruction screens
         SharedPreferences shared = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
@@ -68,12 +50,39 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void handleAuthentication() {
+        if (anonymous) {
+            username = "anonymous";
+            String welcomeText = "Welcome, anonymous.";
+            welcomeTV.setText(welcomeText);
+            String signInText = "Sign in";
+            singInOrOutButton.setText(signInText);
+        } else {
+            firebaseAuth = FirebaseAuth.getInstance();
+            firebaseUser = firebaseAuth.getCurrentUser();
+            if (firebaseUser == null) {
+                Intent startSignIn = new Intent(this, SignInActivity.class);
+                startActivity(startSignIn);
+            } else {
+                String userID = firebaseUser.getUid();
+                System.out.println("USER ID: " + userID);
+
+                username = getFirstName(firebaseUser.getDisplayName());
+                String welcomeStr = "Signed in as " + username;
+                welcomeTV.setText(welcomeStr);
+
+                String signOutText = "Sign out";
+                singInOrOutButton.setText(signOutText);
+            }
+        }
+    }
+
     // first "screen" for instructions
     public void showWelcomeDialog1() {
         AlertDialog.Builder builder = new AlertDialog.Builder(
                 new ContextThemeWrapper(this, R.style.AlertDialogCustom));
         builder.setTitle("Instructions (1/3)");
-        builder.setMessage("Welcome! Thanks for downloading. " +
+        builder.setMessage("Welcome! " +
                 "In this game you have to find as much rhyme words as possible " +
                 "within the specified time. Do you got what it takes to become " +
                 "the next rhyme master?");
@@ -92,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle("Instructions (2/3)");
         builder.setMessage("You can choose your difficulty, ranging from Easy to Insane. " +
                 "The difficulty influences the words as well as the time to rhyme. " +
-                "You can also earn achievements and keep track of your scores, " +
-                "these can be found in the Main Menu.");
+                "You can also earn achievements and keep track of your scores " +
+                "in the global leaderboard. These can be found in the Main Menu.");
         builder.setNegativeButton(">", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 showWelcomeDialog3();
@@ -113,8 +122,8 @@ public class MainActivity extends AppCompatActivity {
                 new ContextThemeWrapper(this, R.style.AlertDialogCustom));
 
         builder.setTitle("Instructions (3/3)");
-        builder.setMessage("You can always go to the Instructions from the Main Menu " +
-                "when you forget something. Have fun playing!");
+        builder.setMessage("Important: you will need an active internet connection to be able " +
+                "to play the game and check out the leaderboard. Have fun playing!");
         builder.setNegativeButton("OK!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // save to SharedPreferences

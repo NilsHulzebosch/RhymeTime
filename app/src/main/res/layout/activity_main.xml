@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentTop="true"
-    android:background="#666">
+    android:background="@color/generalBackground">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="105dp"
-        android:background="#FFF" />
+        android:background="@color/white" />
 
     <Button
         android:text="@string/play"
@@ -61,7 +61,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#FFF" />
+        android:background="@color/white" />
 
     <Button
         android:text="@string/my_scores"
@@ -74,7 +74,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#FFF" />
+        android:background="@color/white" />
 
     <Button
         android:text="@string/achievements"
@@ -87,7 +87,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#FFF" />
+        android:background="@color/white" />
 
     <Button
         android:text="@string/instructions"
@@ -100,6 +100,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#FFF" />
+        android:background="@color/white" />
 
 </LinearLayout>

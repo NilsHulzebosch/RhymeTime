@@ -14,4 +14,9 @@
     <color name="A4Color">#21FE80</color>
     <color name="A5Color">#80FE08</color>
 
+    <color name="white">#FFF</color>
+    <color name="black">#000</color>
+
+    <color name="generalBackground">#666</color>
+
 </resources>

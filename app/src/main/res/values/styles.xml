@@ -2,12 +2,12 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">#000</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- general button style -->
     <style name="buttonStyle">
         <item name="android:textSize">18sp</item>
         <item name="android:layout_width">wrap_content</item>
@@ -17,6 +17,22 @@
         <item name="android:textColor">#FFF</item>
     </style>
 
+    <!-- achievement title style -->
+    <style name="achievementButtonTitle" parent="@style/buttonStyle">
+        <item name="android:background">#333333</item>
+        <item name="android:padding">15dp</item>
+    </style>
+
+    <!-- achievement text style -->
+    <style name="achievementButtonText" parent="@style/buttonStyle">
+        <item name="android:background">#333333</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:paddingLeft">75dp</item>
+        <item name="android:paddingRight">75dp</item>
+    </style>
+
+
+    <!-- button styles with different background colors -->
     <style name="black" parent="@style/buttonStyle">
         <item name="android:background">#000</item>
     </style>
@@ -25,11 +41,7 @@
         <item name="android:background">#333333</item>
     </style>
 
-    <style name="achievementText" parent="@style/grey">
-        <item name="android:paddingLeft">30dp</item>
-        <item name="android:paddingRight">30dp</item>
-    </style>
-
+    <!-- alert dialog text style -->
     <style name="AlertDialogCustom" parent="@android:style/Theme.Dialog">
         <item name="android:typeface">sans</item>
         <item name="android:textSize">15sp</item>

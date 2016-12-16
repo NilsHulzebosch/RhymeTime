@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentTop="true"
-    android:background="#666">
+    android:background="@color/generalBackground">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/welcomeTV"
-            android:text="Currently not signed in."
+            android:text="@string/currently_not_signed_in"
             android:textStyle="italic"
             android:textColor="#191919"
             android:layout_marginTop="9dp"
@@ -47,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="9dp"
-        android:background="#FFF" />
+        android:background="@color/white" />
 
     <Button
         android:text="@string/play"
@@ -60,7 +60,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#FFF" />
+        android:background="@color/white" />
 
     <Button
         android:text="@string/my_scores"
@@ -73,7 +73,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#FFF" />
+        android:background="@color/white" />
 
     <Button
         android:text="@string/achievements"
@@ -86,7 +86,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#FFF" />
+        android:background="@color/white" />
 
     <Button
         android:text="@string/instructions"
@@ -99,6 +99,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#FFF" />
+        android:background="@color/white" />
 
 </LinearLayout>

@@ -23,4 +23,29 @@
         Also, the words will keep getting harder. Do you got what it takes
         to become the next rhyme master? Good luck!
     </string>
+    <string name="A5Text">Rhymed 8 or more words in \'Insane\' mode.</string>
+    <string name="A5Title">You should be a rapper…</string>
+    <string name="A4Text">Rhymed 6 or more words in \'Hard\' mode.</string>
+    <string name="A4Title">Shaky Spears!</string>
+    <string name="A3Text">Scored 1001 points or more in a stage.</string>
+    <string name="A3Title">1001 Nights of Practice</string>
+    <string name="A2Title">Easy Complication</string>
+    <string name="A2Text">Rhymed 10 or more words in \'Easy\' mode.</string>
+    <string name="A1Title">The Gentlest Experimentalist</string>
+    <string name="A1Text">Played your first game!</string>
+    <string name="currently_not_signed_in">Currently not signed in.</string>
+    <string name="press_the_back_button_one_more_time_to_quit_the_game">Press the back button one more time to quit the game.</string>
+    <string name="check">Check</string>
+    <string name="enter_rhyme">Enter rhyme</string>
+    <string name="username">Username</string>
+    <string name="stage">Stage</string>
+    <string name="words">#words</string>
+    <string name="score">Score</string>
+    <string name="refresh">Refresh</string>
+    <string name="click_to_refresh_leaderboard">Click to refresh leaderboard</string>
+    <string name="please_sign_in_using_your_google_account">Please sign in using your Google account.</string>
+    <string name="when_signing_in_your_scores_will_be_added_to_the_global_leaderboard">When signing in, your scores will be added to the global leaderboard.</string>
+    <string name="you_can_also_proceed_without_signing_in">You can also proceed without signing in.</string>
+    <string name="your_scores_will_be_added_under_the_universal_name_anonymous_along_with_all_other_non_signed_in_players">Your scores will be added under the universal name \'anonymous\', along with all other non-signed-in players.</string>
+    <string name="proceed_without_signing_in">Proceed without signing in</string>
 </resources>

@@ -8,22 +8,22 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#666"
+    android:background="@color/generalBackground"
     tools:context="com.example.nils.rhymetime.ScoreOverviewActivity">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:weightSum="1.0"
-        android:background="#000"
+        android:background="@color/black"
         android:id="@+id/refreshLL">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.7"
-            android:textColor="#FFF"
-            android:text="Click to refresh leaderboard"
+            android:textColor="@color/white"
+            android:text="@string/click_to_refresh_leaderboard"
             android:id="@+id/sample"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="15dp"
@@ -34,9 +34,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
-            android:text="Refresh"
-            android:textColor="#FFF"
-            android:background="#000"
+            android:text="@string/refresh"
+            android:textColor="@color/white"
+            android:background="@color/black"
             android:id="@+id/refreshButton"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="40dp"
@@ -49,7 +49,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:weightSum="1.0"
-        android:background="#000"
+        android:background="@color/black"
         android:layout_marginTop="1dp"
         android:layout_below="@id/refreshLL"
         android:id="@+id/titlesLL">
@@ -58,8 +58,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.18"
-            android:textColor="#FFF"
-            android:text="Score"
+            android:textColor="@color/white"
+            android:text="@string/score"
             android:paddingLeft="10dp"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"/>
@@ -68,16 +68,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.18"
-            android:textColor="#FFF"
-            android:text="#words"
+            android:textColor="@color/white"
+            android:text="@string/words"
             android:padding="2dp"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
-            android:textColor="#FFF"
-            android:text="Stage"
+            android:textColor="@color/white"
+            android:text="@string/stage"
             android:paddingLeft="14dp"
             android:paddingStart="14dp"
             android:paddingEnd="14dp"/>
@@ -86,8 +86,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.34"
-            android:textColor="#FFF"
-            android:text="Username"
+            android:textColor="@color/white"
+            android:text="@string/username"
             android:paddingLeft="8dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"/>
