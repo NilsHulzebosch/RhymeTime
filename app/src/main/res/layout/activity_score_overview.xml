@@ -8,55 +8,98 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#666"
     tools:context="com.example.nils.rhymetime.ScoreOverviewActivity">
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Refresh"
-        android:id="@+id/refreshButton"/>
+        android:weightSum="1.0"
+        android:background="#000"
+        android:id="@+id/refreshLL">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="See global leaderboard below"
-        android:id="@+id/sample"
-        android:layout_marginTop="10dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:textColor="#FFF"
+            android:text="Click to refresh leaderboard"
+            android:id="@+id/sample"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="12dp"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:text="Refresh"
+            android:textColor="#FFF"
+            android:background="#000"
+            android:id="@+id/refreshButton"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginBottom="12dp"/>
+
+    </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="50dp">
+        android:weightSum="1.0"
+        android:background="#000"
+        android:layout_marginTop="1dp"
+        android:layout_below="@id/refreshLL"
+        android:id="@+id/titlesLL">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Score"/>
+            android:layout_weight="0.18"
+            android:textColor="#FFF"
+            android:text="Score"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="#Words"/>
+            android:layout_weight="0.18"
+            android:textColor="#FFF"
+            android:text="#words"
+            android:padding="2dp"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Stage"/>
+            android:layout_weight="0.3"
+            android:textColor="#FFF"
+            android:text="Stage"
+            android:paddingLeft="14dp"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Username"/>
+            android:layout_weight="0.34"
+            android:textColor="#FFF"
+            android:text="Username"
+            android:paddingLeft="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"/>
+
     </LinearLayout>
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/titlesLL"
         android:id="@+id/scoreListView"
-        android:layout_marginTop="100dp">
+        android:layout_marginTop="1dp">
     </ListView>
-
-
 
 </RelativeLayout>

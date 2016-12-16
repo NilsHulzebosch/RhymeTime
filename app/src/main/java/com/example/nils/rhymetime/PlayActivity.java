@@ -40,7 +40,7 @@ public class PlayActivity extends AppCompatActivity {
     private String theRhymeWord; // the chosen word you have to rhyme with
     private String searchResults; // all rhyme-words for this word from the API as a string
 
-    private String stage; // easy, medium, etc. (param from PlayOverviewActivity)
+    private String stage; // easy, medium, hard or insane (param from PlayOverviewActivity)
 
     // from searchResults (String) to JSON Object to ArrayList of RhymeWord objects
     private ArrayList<RhymeWord> allRhymeWords;
@@ -55,8 +55,6 @@ public class PlayActivity extends AppCompatActivity {
     private int totalRhymeWordsFound; // total rhyme words found in this round
     private int totalTime; // start time of current stage
     private long remainingTime; // remaining time when pressing 'back'-button
-    private int minSyllables; // min. amount of syllables for your rhyme words
-    private int maxSyllables; // max. amount of syllables for your rhyme words
 
     // all XML objects for the UI
     private TextView wordToRhymeWithTV;
@@ -72,8 +70,6 @@ public class PlayActivity extends AppCompatActivity {
 
     private static String FIREBASE_URL = "https://rhymetime-b8195.firebaseio.com/";
     private String username;
-
-    private ArrayList<String> randomWords;
 
 
     @Override
@@ -111,64 +107,38 @@ public class PlayActivity extends AppCompatActivity {
         System.out.println("i is:" + i + "  and possibleWords is " + possibleWords);
         theRhymeWord = possibleWords.get(i);
 
-
     }
 
     /* This method sets the correct time and the possible words list,
-     * based on the difficulty of the chosen stage. From this possible words list,
-     * a random word is chosen. When the "Random" stage is chosen,
-     * a totally random word is chosen using an API (does NOT work yet!)
+     * based on the difficulty of the chosen stage.
+     * From this possible words list a random word is chosen.
      */
     public void setTimeAndPossibleWords() {
         possibleWords = new ArrayList<>();
-        minSyllables = 0;
-        maxSyllables = 25;
         switch (stage) {
             case "easy":
                 totalTime = 70000;
-                possibleWords = Arrays.asList("sing", "cool", "boat", "plant",
-                        "cat", "walk", "blue", "pan", "brick", "fire");
+                possibleWords = Arrays.asList("sing", "cat", "walk", "pan", "fire");
                 break;
             case "medium":
                 totalTime = 60000;
-                possibleWords = Arrays.asList("house", "sleep", "yellow");
+                possibleWords = Arrays.asList("sleep", "though", "blue", "cool",
+                        "though", "boat", "plant", "brick", "fire");
                 break;
             case "hard":
                 totalTime = 50000;
-                Random rand1 = new Random();
-                int randomNum1 = rand1.nextInt((1) + 1);
-                if (randomNum1 < 0.5) {
-                    possibleWords = Arrays.asList("fruit", "though", "height", "gum");
-                    minSyllables = 3;
-                    maxSyllables = 3;
-                } else {
-                    possibleWords = Arrays.asList("drawer", "rural", "verse", "pork");
-                    minSyllables = 0;
-                    maxSyllables = 25;
-                }
+                possibleWords = Arrays.asList("drawer", "rural", "verse", "pork", "arm",
+                        "height", "gum", "yellow", "house");
                 break;
             case "insane":
                 totalTime = 40000;
-                Random rand2 = new Random();
-                int randomNum2 = rand2.nextInt((1) + 1);
-                if (randomNum2 < 0.335) {
-                    possibleWords = Arrays.asList("fruit", "though");
-                    minSyllables = 4;
-                    maxSyllables = 4;
-                } else if (randomNum2 < 0.67) {
-                    possibleWords = Arrays.asList("chorus", "tough", "cough", "bought", "arm");
-                    minSyllables = 3;
-                    maxSyllables = 25;
-                } else {
-                    possibleWords = Arrays.asList("babe", "against", "lyrics", "sullen",
-                            "gravity", "subtle", "colonel", "lettuce", "squirrel");
-                    minSyllables = 0;
-                    maxSyllables = 25;
-                }
+                possibleWords = Arrays.asList("babe", "against", "lyrics", "sullen",
+                            "gravity", "subtle", "colonel", "lettuce", "squirrel",
+                        "fruit", "chorus", "tough", "cough", "bought");
                 break;
-            default:
+            default: // fallback
                 totalTime = 60000;
-                possibleWords = Arrays.asList("random", "john", "cena");
+                possibleWords = Arrays.asList("random", "native", "app","studio");
                 break;
         }
     }
@@ -297,14 +267,25 @@ public class PlayActivity extends AppCompatActivity {
                 // go back to MainActivity
                 Intent goToPlayOverview = new Intent(getApplicationContext(),
                         MainActivity.class);
+                if (username.equals("anonymous")) {
+                    goToPlayOverview.putExtra("anonymous", true);
+
+                }
                 startActivity(goToPlayOverview);
                 finish();
             }
         });
-        finishBuilder.setPositiveButton("Challenge friend", new DialogInterface.OnClickListener() {
+        finishBuilder.setPositiveButton("Leaderboard", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                // send a challenge to a friend with the current word,
-                // your score and amount of words
+                // go back to ScoreOverviewActivity
+                Intent goToScoreOverview = new Intent(getApplicationContext(),
+                        ScoreOverviewActivity.class);
+                if (username.equals("anonymous")) {
+                    goToScoreOverview.putExtra("anonymous", true);
+
+                }
+                startActivity(goToScoreOverview);
+                finish();
             }
         });
         finishBuilder.show();
@@ -470,6 +451,10 @@ public class PlayActivity extends AppCompatActivity {
                 // go back to MainActivity
                 Intent goToMainActivity = new Intent(getApplicationContext(),
                         MainActivity.class);
+                if (username.equals("anonymous")) {
+                    goToMainActivity.putExtra("anonymous", true);
+
+                }
                 startActivity(goToMainActivity);
                 finish();
             }
@@ -604,7 +589,7 @@ public class PlayActivity extends AppCompatActivity {
     // THIS CODE IS NOT READY YET
     public void saveScoreToDB() {
         // create new score object with the correct variables
-        Score score = new Score("hello",
+        Score score = new Score(username,
                 totalScore,
                 totalRhymeWordsFound,
                 stage,

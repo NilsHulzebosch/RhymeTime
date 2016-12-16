@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 userID = firebaseUser.getUid();
                 System.out.println("USER ID: " + userID);
 
-                username = firebaseUser.getDisplayName();
+                username = getFirstName(firebaseUser.getDisplayName());
                 String welcomeStr = "Signed in as " + username;
                 welcomeTV.setText(welcomeStr);
 
@@ -66,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         if (firstTime) {
             showWelcomeDialog1();
         }
+
     }
 
     // first "screen" for instructions
@@ -134,13 +134,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /* This method turns the full name of the user into the first name only.
-     * This is for UI purposes when showing the scores. Of course it is better to have
-     * a username instead of someone's real name to prevent duplicates, but for now
-     * his will suffices (also because the people that will play this game will
-     * not have the same name, because only a handful of people (I know) will play it).
+     * This is for UI purposes when showing the scores AND for JSON purposes,
+     * because using whitespace in a string can result in errors.
+     * Of course it is better to have an unique username instead of someone's real name
+     * to prevent duplicates, but for this 'demo' this will suffice.
      */
-    public void getFirstName() {
+    public String getFirstName(String fullUsername) {
 
+        int index = fullUsername.indexOf(" "); // this finds the first occurrence of " "
+
+        // if a whitespace is found, set correct username until the whitespace
+        if (index != -1) {
+            return fullUsername.substring(0, index);
+        } else {
+            if (fullUsername.length() > 9) {
+                return fullUsername.substring(0, 9);
+            } else {
+                return fullUsername.substring(0, fullUsername.length());
+            }
+        }
     }
 
     /* Intents for the four activities
@@ -161,11 +173,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToAchievements(View view) {
         Intent goToAchievements = new Intent(this, AchievementsActivity.class);
+        goToAchievements.putExtra("username", username);
         startActivity(goToAchievements);
     }
 
     public void goToInstructions(View view) {
         Intent goToInstructions = new Intent(this, InstructionsActivity.class);
+        goToInstructions.putExtra("username", username);
         startActivity(goToInstructions);
     }
 

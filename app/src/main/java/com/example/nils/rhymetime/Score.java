@@ -28,16 +28,21 @@ public class Score {
     }
 
     @Override
-    // TEMPORARY method, this will by replaced by a CustomAdapter
+    /* This method turns a Score object into a string.
+     * It is used at displaying the leaderboard scores. Based on the length of each
+     * variable, the correct amount of whitespaces are being added so the
+     * UI looks like a smooth leaderboard.
+     */
     public String toString() {
         int scoreL = String.valueOf(score).length();
         int wordsAmountL = String.valueOf(wordsAmount).length();
         int difficultyL = difficulty.length();
         int rhymeWordL = rhymeWord.length();
 
-        return "" + score + TextUtils.join("", Collections.nCopies(8 - scoreL, " ")) +
-                wordsAmount + TextUtils.join("", Collections.nCopies(8 - wordsAmountL, " ")) +
-                rhymeWord + TextUtils.join("", Collections.nCopies(22 - rhymeWordL, " ")) +
-                difficulty + "";
+        return "" + score + TextUtils.join("", Collections.nCopies(14 - scoreL*3, " ")) +
+                wordsAmount + TextUtils.join("", Collections.nCopies(8 - wordsAmountL*3, " ")) +
+                rhymeWord + TextUtils.join("", Collections.nCopies(26 - rhymeWordL*3, " ")) +
+                difficulty + TextUtils.join("", Collections.nCopies(18 - difficultyL*2, " ")) +
+                username;
     }
 }

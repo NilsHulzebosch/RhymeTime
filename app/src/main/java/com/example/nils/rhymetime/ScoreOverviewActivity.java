@@ -5,23 +5,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-
-import static java.util.logging.Level.parse;
 
 public class ScoreOverviewActivity extends AppCompatActivity {
 
@@ -38,32 +32,13 @@ public class ScoreOverviewActivity extends AppCompatActivity {
 
         scoreArrayList = new ArrayList<>();
         setAdapter();
-        addTESTListener();
+        addListener();
     }
 
+    /*
     public void addListener() {
         Firebase.setAndroidContext(this); // set context
         Firebase ref = new Firebase(FIREBASE_URL); // get FireBase reference
-
-        /*
-        Button refreshButton = (Button) findViewById(R.id.refreshButton);
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                     @Override
-                     public void onDataChange(DataSnapshot snapshot) {
-                         // do some stuff once
-                     }
-
-                     @Override
-                     public void onCancelled(FirebaseError firebaseError) {
-                         System.out.println("The read failed: " + firebaseError.getMessage());
-                     }
-                 });
-             }
-         });
-         */
 
         // value event listener for real-time data update
         ref.addValueEventListener(new ValueEventListener() {
@@ -120,8 +95,8 @@ public class ScoreOverviewActivity extends AppCompatActivity {
             }
         });
     }
-
-    public void addTESTListener() {
+    */
+    public void addListener() {
         Firebase.setAndroidContext(this); // set context
         final Firebase ref = new Firebase(FIREBASE_URL); // get FireBase reference
 
@@ -160,13 +135,25 @@ public class ScoreOverviewActivity extends AppCompatActivity {
                                             rhymeWord,
                                             listOfRhymedWords);
 
-                                    //for (int i = 0; i < scoreArrayList.size(); ) {
-                                    //    if (scoreObject.score >= scoreArrayList.get(i).score) {
-                                    //        scoreArrayList.add(i, scoreObject);
-                                    //        break;
-                                    //    }
-                                    //}
-                                    scoreArrayList.add(scoreObject);
+
+                                    // add Score based on score (from highest to lowest)
+                                    if (scoreArrayList.size() == 0) {
+                                        scoreArrayList.add(scoreObject);
+                                    } else {
+                                        int i = 0;
+                                        while (i < scoreArrayList.size() &&
+                                                scoreObject.score < scoreArrayList.get(i).score) {
+                                            i++;
+                                        }
+                                        if (i == scoreArrayList.size()) {
+                                            scoreArrayList.add(scoreObject);
+
+                                        } else {
+                                            scoreArrayList.add(i, scoreObject);
+                                        }
+                                    }
+
+                                    //scoreArrayList.add(scoreObject);
 
                                 } catch (JSONException e1) {
                                     e1.printStackTrace();
@@ -174,6 +161,7 @@ public class ScoreOverviewActivity extends AppCompatActivity {
                             }
                         }
                         //sortScores();
+                        System.out.println(scoreArrayList);
                         scoresList.notifyDataSetChanged(); // update ArrayAdapter
                     }
 
@@ -192,11 +180,8 @@ public class ScoreOverviewActivity extends AppCompatActivity {
     }
 
     public void setAdapter() {
-        System.out.println("Hi there" + scoreArrayList);
-
         results = (ListView) findViewById(R.id.scoreListView);
-        scoresList = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, scoreArrayList);
+        scoresList = new LeaderboardAdapter(this, scoreArrayList);
         results.setAdapter(scoresList);
     }
 }

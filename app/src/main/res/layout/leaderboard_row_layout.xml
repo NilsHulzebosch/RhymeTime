@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#000">
+
+        <TableRow>
+            <TextView
+                android:layout_width="61dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/scoreTextView"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:textColor="#FFF"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:background="#666">
+            </View>
+
+            <TextView
+                android:layout_width="46dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/wordsAmountTextView"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:textColor="#FFF"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:background="#666">
+            </View>
+
+            <TextView
+                android:layout_width="86dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/difficultyTextView"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:textColor="#FFF"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:background="#666">
+            </View>
+
+            <TextView
+                android:layout_width="132dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/usernameTextView"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:textColor="#FFF"/>
+
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

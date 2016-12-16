@@ -2,7 +2,7 @@
     <string name="app_name">RhymeTime</string>
     <string name="instructions">INSTRUCTIONS</string>
     <string name="achievements">ACHIEVEMENTS</string>
-    <string name="my_scores">MY SCORES</string>
+    <string name="my_scores">LEADERBOARD</string>
     <string name="play">PLAY</string>
     <string name="main_menu">MAIN MENU</string>
     <string name="easy">easy</string>

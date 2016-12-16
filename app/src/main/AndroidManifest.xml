@@ -7,7 +7,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/rt_new_app_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -33,7 +33,7 @@
             android:label="ACHIEVEMENTS" />
         <activity
             android:name=".ScoreOverviewActivity"
-            android:label="SCORES"></activity>
+            android:label="LEADERBOARD"></activity>
         <activity android:name=".SignInActivity"></activity>
     </application>
 
