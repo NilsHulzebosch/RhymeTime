@@ -55,3 +55,6 @@ Of course this is a demo version, because we only had 2 weeks. But in the future
 
 ## Screenshot 1
 ![rhymetime1](https://cloud.githubusercontent.com/assets/16048199/21280915/483be416-c3e9-11e6-989b-e472ebc8b28b.jpg)
+
+## Screenshot 2
+![rhymetime2](https://cloud.githubusercontent.com/assets/16048199/21280916/4fbc0900-c3e9-11e6-8ef9-5ba0bb3e2739.jpg)
