@@ -8,14 +8,13 @@ import java.util.ArrayList;
 
 public class MyAsyncTask extends AsyncTask<String, Integer, String> {
 
-    PlayActivity activity;
-    Context context;
+    private Context context;
     public ArrayList<RhymeWord> searchResults;
 
     // constructor
     public MyAsyncTask(PlayActivity activity) {
-        this.activity = activity;
-        this.context = this.activity.getApplicationContext();
+        PlayActivity activity1 = activity;
+        this.context = activity1.getApplicationContext();
         this.searchResults = new ArrayList<>();
     }
 
@@ -28,8 +27,6 @@ public class MyAsyncTask extends AsyncTask<String, Integer, String> {
     protected String doInBackground(String... params) {
         return HttpRequestHelper.downloadFromServer(params);
     }
-
-    // onProgressUpdate()
 
     // onPostExecute()
     protected void onPostExecute(String result) {

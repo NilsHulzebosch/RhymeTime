@@ -66,47 +66,72 @@ public class PlayActivity extends AppCompatActivity {
     private CustomAdapter toDoListAdapter;
 
     private CountDownTimer countDownTimer; // timer
-
     private String username; // Google username when logged in, otherwise 'anonymous'
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        // if there is a savedInstanceState, set all variables correctly and continue
+        /*if (savedInstanceState != null) {
+            stage = (String) savedInstanceState.get("stage");
+            theRhymeWord = (String) savedInstanceState.get("theRhymeWord");
+            allRhymeWords = (ArrayList<RhymeWord>) savedInstanceState.get("allRhymeWords");
+            alreadyGuessed = (ArrayList<String>) savedInstanceState.get("alreadyGuessed");
+            currentScore = (int) savedInstanceState.get("currentScore");
+            totalScore = (int) savedInstanceState.get("totalScore");
+            totalRhymeWordsFound = (int) savedInstanceState.get("totalRhymeWordsFound");
+            totalTime = (int) savedInstanceState.get("totalTime");
+            remainingTime = (long) savedInstanceState.get("remainingTime");
+            username = (String) savedInstanceState.get("username");
+
+            initializeXML();
+            initializeAdapter();
+            setEditTextListener();
+            makeUIVisible();
+            setTimer(remainingTime);
+            String wordExpl = "\'" + theRhymeWord + "\'";
+            wordToRhymeWithTV.setText(wordExpl);
+
+        } else {*/
+
+        // if there is no savedInstanceState, initialize all variables and continue
+        SharedPreferences shared = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+        username = shared.getString("username", "anonymous");
+
         Bundle extras = getIntent().getExtras();
         stage = extras.getString("stage");
-        username = extras.getString("username", "anonymous");
 
         setTimeAndPossibleWords();
-        initializeParameters();
+        initializeXML();
+        initializeVariables();
         showStartingDialog();
         initializeAdapter();
         getAllRhymes();
         setEditTextListener();
+        //}
     }
 
-    // initialize all (xml) objects and variables
-    public void initializeParameters() {
-        alreadyGuessed = new ArrayList<>();
-        allRhymeWords = new ArrayList<>();
 
-        wordToRhymeWithTV = (TextView) findViewById(R.id.wordToRhymeWithTV);
-        timerTV = (TextView) findViewById(R.id.timer);
-        lineView = findViewById(R.id.lineView);
-        currentWordET = (EditText) findViewById(R.id.currentWordET);
-        checkButton = (Button) findViewById(R.id.checkButton);
-        infoTV = (TextView) findViewById(R.id.infoTV);
-        totalRhymeWordsFound = 0;
-        totalScore = 0;
+    /*@Override
+    // this method saves the state of all variables
+    public void onSaveInstanceState(Bundle outState) {
 
-        Random rand = new Random();
-        int i = rand.nextInt((possibleWords.size()));
-        System.out.println("i is:" + i + "  and possibleWords is " + possibleWords);
-        theRhymeWord = possibleWords.get(i);
+        outState.putString("stage", stage);
+        outState.putString("theRhymeWord", theRhymeWord);
+        outState.putSerializable("allRhymeWords", allRhymeWords);
+        outState.putStringArrayList("alreadyGuessed", alreadyGuessed);
+        outState.putInt("currentScore", currentScore);
+        outState.putInt("totalScore", totalScore);
+        outState.putInt("totalRhymeWordsFound", totalRhymeWordsFound);
+        outState.putInt("totalTime", totalTime);
+        outState.putLong("remainingTime", remainingTime);
+        outState.putString("username", username);
+
+        super.onSaveInstanceState(outState); // save the outState Bundle
     }
-
+    */
     /* This method sets the correct time and the possible words list,
      * based on the difficulty of the chosen stage.
      * From this possible words list a random word is chosen.
@@ -141,6 +166,27 @@ public class PlayActivity extends AppCompatActivity {
         }
     }
 
+    // initialize all xml objects
+    public void initializeXML() {
+        wordToRhymeWithTV = (TextView) findViewById(R.id.wordToRhymeWithTV);
+        timerTV = (TextView) findViewById(R.id.timer);
+        lineView = findViewById(R.id.lineView);
+        currentWordET = (EditText) findViewById(R.id.currentWordET);
+        checkButton = (Button) findViewById(R.id.checkButton);
+        infoTV = (TextView) findViewById(R.id.infoTV);
+    }
+
+    // initialize all variables
+    public void initializeVariables() {
+        alreadyGuessed = new ArrayList<>();
+        allRhymeWords = new ArrayList<>();
+        totalRhymeWordsFound = 0;
+        totalScore = 0;
+        Random rand = new Random();
+        int i = rand.nextInt((possibleWords.size()));
+        theRhymeWord = possibleWords.get(i);
+    }
+
     // initialize GridView and CustomAdapter
     public void initializeAdapter() {
         alreadyGuessedGridView = (GridView) findViewById(R.id.alreadyGuessedGridView);
@@ -162,7 +208,7 @@ public class PlayActivity extends AppCompatActivity {
      */
     public void showStartingDialog() {
         AlertDialog.Builder startBuilder = new AlertDialog.Builder(
-                new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+                new ContextThemeWrapper(PlayActivity.this, R.style.AlertDialogCustom));
         startBuilder.setCancelable(false);
         startBuilder.setTitle("The word you have to rhyme with is \'" + theRhymeWord + "\'.");
         startBuilder.setMessage("You have 60 seconds. Try to find as much rhyme words as possible!");
@@ -171,7 +217,6 @@ public class PlayActivity extends AppCompatActivity {
                 // go back to PlayOverview
                 Intent goToPlayOverview = new Intent(getApplicationContext(),
                         PlayOverviewActivity.class);
-                goToPlayOverview.putExtra("username", username);
                 startActivity(goToPlayOverview);
                 finish();
             }
@@ -252,8 +297,9 @@ public class PlayActivity extends AppCompatActivity {
      * Challenging a friend will probably be replaced by some other button like "see scores".
      */
     public void showEndingDialog() {
-        AlertDialog.Builder finishBuilder = new AlertDialog.Builder(
-                new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+        AlertDialog.Builder finishBuilder;
+        finishBuilder = new AlertDialog.Builder(
+                new ContextThemeWrapper(PlayActivity.this, R.style.AlertDialogCustom));
         finishBuilder.setCancelable(false);
         finishBuilder.setTitle("Time's up!");
         if (totalRhymeWordsFound > 1) {
@@ -458,7 +504,7 @@ public class PlayActivity extends AppCompatActivity {
      */
     public void showLeavingDialog(final long remainingTime) {
         AlertDialog.Builder leaveBuilder = new AlertDialog.Builder(
-                new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+                new ContextThemeWrapper(PlayActivity.this, R.style.AlertDialogCustom));
         leaveBuilder.setCancelable(false);
         leaveBuilder.setTitle("Psst");
         leaveBuilder.setMessage("Your current progress will not be saved. " +

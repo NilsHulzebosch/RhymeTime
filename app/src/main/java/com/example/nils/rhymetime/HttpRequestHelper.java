@@ -12,7 +12,6 @@ public class HttpRequestHelper {
 
     // make string for URL
     private static final String rhymeWordURL = "https://api.datamuse.com/words?rel_rhy=";
-    private static final String randomWordURL = "http://www.setgetgo.com/randomword/get.php?len=4";
 
     // method to download from server
     protected static String downloadFromServer(String... params) {
@@ -20,14 +19,7 @@ public class HttpRequestHelper {
         // declare return String result
         String result = "";
 
-        String correctUrl;
-        if (params[0].equals("rhymeWord")) {
-            // the rhyme word API needs to be called
-            correctUrl = rhymeWordURL + params[1];
-        } else {
-            // the random word API needs to be called
-            correctUrl = randomWordURL;
-        }
+        String correctUrl = rhymeWordURL + params[1]; // add rhyme word to url
 
         // turn string into URL
         URL url = null;
@@ -51,7 +43,6 @@ public class HttpRequestHelper {
                 //if response if between 200 and 300, there is a connection,read InputStream
                 if (responseCode >= 200 && responseCode < 300) {
                     InputStream is = connection.getInputStream();
-                    System.out.println("TEST2");
                     BufferedReader br = new BufferedReader(new InputStreamReader(is));
                     String line;
 

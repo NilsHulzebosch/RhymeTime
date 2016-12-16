@@ -1,5 +1,9 @@
 package com.example.nils.rhymetime;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -34,10 +38,28 @@ public class ScoreOverviewActivity extends AppCompatActivity {
 
         setAdapter();
         addListener();
-        refreshButton.performClick();
+
+        // get score data from FireBase if there is an active internet connection
+        if (isNetworkAvailable()) {
+            refreshButton.performClick();
+        } else {
+            Toast.makeText(this, "You do not have an active internet connection. " +
+                            "Please connect to the internet to be able to play.",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
+    // initialize the custom Adapter (with an empty ArrayList)
+    public void setAdapter() {
+        ListView results = (ListView) findViewById(R.id.scoreListView);
+        scoresList = new LeaderboardAdapter(this, scoreArrayList);
+        results.setAdapter(scoresList);
+    }
 
+    /* Add event listener for the 'Refresh' button. Whenever clicked,
+     * call updateScoreList(snapshot), which will get the correct Score data,
+     * sort it, and update the Adapter.
+     */
     public void addListener() {
         Firebase.setAndroidContext(this); // set context
         String FIREBASE_URL = "https://rhymetime-b8195.firebaseio.com/";
@@ -65,23 +87,15 @@ public class ScoreOverviewActivity extends AppCompatActivity {
         });
     }
 
-    // initialize the custom Adapter (with an empty ArrayList)
-    public void setAdapter() {
-        ListView results = (ListView) findViewById(R.id.scoreListView);
-        scoresList = new LeaderboardAdapter(this, scoreArrayList);
-        results.setAdapter(scoresList);
-    }
-
-    // update the ArrayList by getting data from FireBase and putting all scores
-    // not equal to zero, from highest to lowest, in the ArrayList
+    /* Update the ArrayList by getting (Score object) data from FireBase,
+     * putting all scores not equal to zero, from highest to lowest, in the ArrayList
+     * and then updating the Adapter with the new ArrayList.
+     */
     public void updateScoreList(DataSnapshot snapshot) {
-        // do some stuff once
         scoreArrayList.clear();
-        System.out.println("There are " + snapshot.getChildrenCount() + " children");
 
         for (DataSnapshot child : snapshot.getChildren()) {
 
-            System.out.println("There are " + child.getChildrenCount() + " grandchildren");
             for (DataSnapshot scoreChild : child.getChildren()) {
 
                 String scoreObj = scoreChild.getValue().toString();
@@ -105,7 +119,7 @@ public class ScoreOverviewActivity extends AppCompatActivity {
 
                     // if score is not zero...
                     if (score != 0) {
-                        // add Score based on score (from highest to lowest)
+                        // add Score object based on score (from highest to lowest)
                         if (scoreArrayList.size() == 0) {
                             scoreArrayList.add(scoreObject);
                         } else {
@@ -128,8 +142,14 @@ public class ScoreOverviewActivity extends AppCompatActivity {
                 }
             }
         }
-        //sortScores();
-        System.out.println(scoreArrayList);
         scoresList.notifyDataSetChanged(); // update ArrayAdapter
+    }
+
+    // this method checks whether there is an active network connection
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

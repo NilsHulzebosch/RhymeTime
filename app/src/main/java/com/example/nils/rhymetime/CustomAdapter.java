@@ -1,6 +1,7 @@
 package com.example.nils.rhymetime;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,9 @@ public class CustomAdapter extends ArrayAdapter<String> {
         super(context, R.layout.row_layout, items);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, final View convertView, ViewGroup parent) {
+    public View getView(int position, final View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.row_layout, parent, false);
 

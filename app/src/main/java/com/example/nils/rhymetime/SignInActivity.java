@@ -32,7 +32,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     TextView mStatusTextView;
     private GoogleApiClient mGoogleApiClient;
 
-    // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private static final int RC_SIGN_IN = 9001;
 
@@ -42,6 +41,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_in);
         mStatusTextView = (TextView) findViewById(R.id.mStatusTextView);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
+
         // Configure Google Sign In
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -62,7 +62,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 .build();
 
         // Initialize FirebaseAuth
-
         mFirebaseAuth = FirebaseAuth.getInstance();
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -84,18 +83,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.sign_in_button:
                 signIn();
-
                 break;
         }
     }
-
 
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

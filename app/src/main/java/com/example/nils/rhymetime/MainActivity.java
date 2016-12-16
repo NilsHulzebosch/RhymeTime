@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView welcomeTV;
     private Button singInOrOutButton;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         welcomeTV = (TextView) findViewById(R.id.welcomeTV);
         singInOrOutButton = (Button) findViewById(R.id.singInOrOutButton);
 
+        // check whether there was an intent
         Bundle extras = getIntent().getExtras();
         anonymous = false;
         if (extras != null){
@@ -49,13 +49,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // set correct text and button based on login or not
     public void handleAuthentication() {
+
         if (anonymous) {
             username = "anonymous";
             String welcomeText = "Welcome, anonymous.";
             welcomeTV.setText(welcomeText);
+
             String signInText = "Sign in";
             singInOrOutButton.setText(signInText);
+
         } else {
             firebaseAuth = FirebaseAuth.getInstance();
             firebaseUser = firebaseAuth.getCurrentUser();
@@ -73,6 +77,12 @@ public class MainActivity extends AppCompatActivity {
                 String signOutText = "Sign out";
                 singInOrOutButton.setText(signOutText);
             }
+
+            // create SharedPreferences editor to save
+            SharedPreferences.Editor editor = getSharedPreferences(
+                    "SharedPreferences", MODE_PRIVATE).edit();
+            editor.putString("username", username); // save to SharedPreferences
+            editor.apply();
         }
     }
 
@@ -124,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
         builder.setCancelable(false);
         builder.setTitle("Instructions (3/3)");
         builder.setMessage("Important: you will need an active internet connection to be able " +
-                "to play the game and check out the leaderboard. Have fun playing!");
+                "to play the game and check out the leaderboard. " +
+                "Also, you can only play in portrait mode. Have fun playing!");
         builder.setPositiveButton("Thanks!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // save to SharedPreferences
@@ -146,17 +157,17 @@ public class MainActivity extends AppCompatActivity {
     /* This method turns the full name of the user into the first name only.
      * This is for UI purposes when showing the scores AND for JSON purposes,
      * because using whitespace in a string can result in errors.
-     * Of course it is better to have an unique username instead of someone's real name
-     * to prevent duplicates, but for this 'demo' this will suffice.
+     * (An unique username would be better but for now it's OK).
      */
     public String getFirstName(String fullUsername) {
 
-        int index = fullUsername.indexOf(" "); // this finds the first occurrence of " "
+        int index = fullUsername.indexOf(" "); // find first occurrence of " "
 
         // if a whitespace is found, set correct username until the whitespace
         if (index != -1) {
             return fullUsername.substring(0, index);
         } else {
+            // otherwise, take substring of the name
             if (fullUsername.length() > 9) {
                 return fullUsername.substring(0, 9);
             } else {
@@ -171,28 +182,25 @@ public class MainActivity extends AppCompatActivity {
      */
     public void goToPlayOverview(View view) {
         Intent goToPlayOverview = new Intent(this, PlayOverviewActivity.class);
-        goToPlayOverview.putExtra("username", username);
         startActivity(goToPlayOverview);
     }
 
     public void goToScoreOverview(View view) {
         Intent goToScoreOverview = new Intent(this, ScoreOverviewActivity.class);
-        goToScoreOverview.putExtra("username", username);
         startActivity(goToScoreOverview);
     }
 
     public void goToAchievements(View view) {
         Intent goToAchievements = new Intent(this, AchievementsActivity.class);
-        goToAchievements.putExtra("username", username);
         startActivity(goToAchievements);
     }
 
     public void goToInstructions(View view) {
         Intent goToInstructions = new Intent(this, InstructionsActivity.class);
-        goToInstructions.putExtra("username", username);
         startActivity(goToInstructions);
     }
 
+    // when the button is pressed, check state and choose correct action
     public void singInOrOut(View view) {
         // sign out and 'refresh' by going to MainActivity again
         if (singInOrOutButton.getText().equals("Sign out")) {

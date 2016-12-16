@@ -20,7 +20,6 @@ public class AchievementsActivity extends AppCompatActivity {
      * The ones that are unlocked have their own color and remain unchanged.
      */
     public void showAchievementStatus() {
-        // get SharedPreferences
         SharedPreferences shared = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         boolean A1Unlocked = shared.getBoolean("A1Unlocked", false);
         boolean A2Unlocked = shared.getBoolean("A2Unlocked", false);

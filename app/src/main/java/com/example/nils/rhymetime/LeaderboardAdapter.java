@@ -1,6 +1,7 @@
 package com.example.nils.rhymetime;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,9 @@ public class LeaderboardAdapter extends ArrayAdapter<Score> {
         super(context, R.layout.row_layout, items);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, final View convertView, ViewGroup parent) {
+    public View getView(int position, final View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.leaderboard_row_layout, parent, false);
 
@@ -27,16 +29,12 @@ public class LeaderboardAdapter extends ArrayAdapter<Score> {
         int score = 0;
         int wordsAmount = 0;
         String difficulty = "unknown";
-        String rhymeWord = "unknown";
-        ArrayList<String> listOfRhymedWords = new ArrayList<>();
 
         if (scoreObject != null) {
             username = scoreObject.username;
             score = scoreObject.score;
             wordsAmount = scoreObject.wordsAmount;
             difficulty = scoreObject.difficulty;
-            rhymeWord = scoreObject.rhymeWord;
-            listOfRhymedWords = scoreObject.listOfRhymedWords;
         }
 
         TextView scoreTextView = (TextView) view.findViewById(R.id.scoreTextView);
@@ -52,7 +50,5 @@ public class LeaderboardAdapter extends ArrayAdapter<Score> {
         usernameTextView.setText(username);
 
         return view;
-
     }
-
 }

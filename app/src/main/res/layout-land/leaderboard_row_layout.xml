@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TableRow>
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/scoreTextView"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:textColor="@color/white"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:background="@color/generalBackground">
+            </View>
+
+            <TextView
+                android:layout_width="118dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/wordsAmountTextView"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:textColor="@color/white"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:background="@color/generalBackground">
+            </View>
+
+            <TextView
+                android:layout_width="177dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/difficultyTextView"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:textColor="@color/white"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:background="@color/generalBackground">
+            </View>
+
+            <TextView
+                android:layout_width="211dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/usernameTextView"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:textColor="@color/white"/>
+
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>
