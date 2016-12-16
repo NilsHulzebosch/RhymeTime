@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -19,10 +20,8 @@ import java.util.ArrayList;
 
 public class ScoreOverviewActivity extends AppCompatActivity {
 
-    private static String FIREBASE_URL = "https://rhymetime-b8195.firebaseio.com/";
-
     private ArrayList<Score> scoreArrayList;
-    private ListView results;
+    private Button refreshButton;
     private ArrayAdapter<Score> scoresList;
 
     @Override
@@ -31,142 +30,34 @@ public class ScoreOverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_score_overview);
 
         scoreArrayList = new ArrayList<>();
+        refreshButton = (Button) findViewById(R.id.refreshButton);
+
         setAdapter();
         addListener();
+        refreshButton.performClick();
     }
 
-    /*
+
     public void addListener() {
         Firebase.setAndroidContext(this); // set context
-        Firebase ref = new Firebase(FIREBASE_URL); // get FireBase reference
-
-        // value event listener for real-time data update
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-
-                scoreArrayList.clear();
-                System.out.println("There are " + snapshot.getChildrenCount() + " children");
-
-                for (DataSnapshot child : snapshot.getChildren()) {
-
-                    System.out.println("There are " + child.getChildrenCount() + " grandchildren");
-                    for (DataSnapshot scoreChild : child.getChildren()) {
-
-                        String scoreObj = scoreChild.getValue().toString();
-
-                        try {
-                            JSONObject jsonObj = new JSONObject(scoreObj);
-
-                            String username = jsonObj.optString("username", "unknown");
-                            int score = jsonObj.optInt("score", 0);
-                            int wordsAmount = jsonObj.optInt("wordsAmount", 0);
-                            String difficulty = jsonObj.optString("difficulty", "unknown");
-                            String rhymeWord = jsonObj.optString("rhymeWord", "unknown");
-                            ArrayList<String> listOfRhymedWords = new ArrayList<>();
-
-                            Score scoreObject = new Score(username,
-                                    score,
-                                    wordsAmount,
-                                    difficulty,
-                                    rhymeWord,
-                                    listOfRhymedWords);
-
-                            //for (int i = 0; i < scoreArrayList.size(); ) {
-                            //    if (scoreObject.score >= scoreArrayList.get(i).score) {
-                            //        scoreArrayList.add(i, scoreObject);
-                            //        break;
-                            //    }
-                            //}
-                            scoreArrayList.add(scoreObject);
-
-                        } catch (JSONException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                }
-                //sortScores();
-                scoresList.notifyDataSetChanged(); // update ArrayAdapter
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
-            }
-        });
-    }
-    */
-    public void addListener() {
-        Firebase.setAndroidContext(this); // set context
+        String FIREBASE_URL = "https://rhymetime-b8195.firebaseio.com/";
         final Firebase ref = new Firebase(FIREBASE_URL); // get FireBase reference
 
-        Button refreshButton = (Button) findViewById(R.id.refreshButton);
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
-                        // do some stuff once
-                        scoreArrayList.clear();
-                        System.out.println("There are " + snapshot.getChildrenCount() + " children");
-
-                        for (DataSnapshot child : snapshot.getChildren()) {
-
-                            System.out.println("There are " + child.getChildrenCount() + " grandchildren");
-                            for (DataSnapshot scoreChild : child.getChildren()) {
-
-                                String scoreObj = scoreChild.getValue().toString();
-
-                                try {
-                                    JSONObject jsonObj = new JSONObject(scoreObj);
-
-                                    String username = jsonObj.optString("username", "unknown");
-                                    int score = jsonObj.optInt("score", 0);
-                                    int wordsAmount = jsonObj.optInt("wordsAmount", 0);
-                                    String difficulty = jsonObj.optString("difficulty", "unknown");
-                                    String rhymeWord = jsonObj.optString("rhymeWord", "unknown");
-                                    ArrayList<String> listOfRhymedWords = new ArrayList<>();
-
-                                    Score scoreObject = new Score(username,
-                                            score,
-                                            wordsAmount,
-                                            difficulty,
-                                            rhymeWord,
-                                            listOfRhymedWords);
-
-
-                                    // add Score based on score (from highest to lowest)
-                                    if (scoreArrayList.size() == 0) {
-                                        scoreArrayList.add(scoreObject);
-                                    } else {
-                                        int i = 0;
-                                        while (i < scoreArrayList.size() &&
-                                                scoreObject.score < scoreArrayList.get(i).score) {
-                                            i++;
-                                        }
-                                        if (i == scoreArrayList.size()) {
-                                            scoreArrayList.add(scoreObject);
-
-                                        } else {
-                                            scoreArrayList.add(i, scoreObject);
-                                        }
-                                    }
-
-                                    //scoreArrayList.add(scoreObject);
-
-                                } catch (JSONException e1) {
-                                    e1.printStackTrace();
-                                }
-                            }
-                        }
-                        //sortScores();
-                        System.out.println(scoreArrayList);
-                        scoresList.notifyDataSetChanged(); // update ArrayAdapter
+                        updateScoreList(snapshot);
+                        Toast.makeText(getApplicationContext(), "Updated leaderboard",
+                                Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
+                        Toast.makeText(getApplicationContext(), "Something went wrong.",
+                                Toast.LENGTH_SHORT).show();
                         System.out.println("The read failed: " + firebaseError.getMessage());
                     }
                 });
@@ -174,14 +65,71 @@ public class ScoreOverviewActivity extends AppCompatActivity {
         });
     }
 
-    // this method sorts all Score objects based on their score from largest to smallest
-    public void sortScores() {
-
-    }
-
+    // initialize the custom Adapter (with an empty ArrayList)
     public void setAdapter() {
-        results = (ListView) findViewById(R.id.scoreListView);
+        ListView results = (ListView) findViewById(R.id.scoreListView);
         scoresList = new LeaderboardAdapter(this, scoreArrayList);
         results.setAdapter(scoresList);
+    }
+
+    // update the ArrayList by getting data from FireBase and putting all scores
+    // not equal to zero, from highest to lowest, in the ArrayList
+    public void updateScoreList(DataSnapshot snapshot) {
+        // do some stuff once
+        scoreArrayList.clear();
+        System.out.println("There are " + snapshot.getChildrenCount() + " children");
+
+        for (DataSnapshot child : snapshot.getChildren()) {
+
+            System.out.println("There are " + child.getChildrenCount() + " grandchildren");
+            for (DataSnapshot scoreChild : child.getChildren()) {
+
+                String scoreObj = scoreChild.getValue().toString();
+
+                try {
+                    JSONObject jsonObj = new JSONObject(scoreObj);
+
+                    String username = jsonObj.optString("username", "unknown");
+                    int score = jsonObj.optInt("score", 0);
+                    int wordsAmount = jsonObj.optInt("wordsAmount", 0);
+                    String difficulty = jsonObj.optString("difficulty", "unknown");
+                    String rhymeWord = jsonObj.optString("rhymeWord", "unknown");
+                    ArrayList<String> listOfRhymedWords = new ArrayList<>();
+
+                    Score scoreObject = new Score(username,
+                            score,
+                            wordsAmount,
+                            difficulty,
+                            rhymeWord,
+                            listOfRhymedWords);
+
+                    // if score is not zero...
+                    if (score != 0) {
+                        // add Score based on score (from highest to lowest)
+                        if (scoreArrayList.size() == 0) {
+                            scoreArrayList.add(scoreObject);
+                        } else {
+                            int i = 0;
+                            while (i < scoreArrayList.size() &&
+                                    scoreObject.score < scoreArrayList.get(i).score) {
+                                i++;
+                            }
+                            if (i == scoreArrayList.size()) {
+                                scoreArrayList.add(scoreObject);
+
+                            } else {
+                                scoreArrayList.add(i, scoreObject);
+                            }
+                        }
+                    }
+
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        //sortScores();
+        System.out.println(scoreArrayList);
+        scoresList.notifyDataSetChanged(); // update ArrayAdapter
     }
 }

@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             anonymous = extras.getBoolean("anonymous", false);
         }
 
-        handleAuthentication();
+        handleAuthentication(); // log in or continue as 'anonymous'
 
         // if the user plays the game for the first time, show instruction screens
         SharedPreferences shared = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         if (firstTime) {
             showWelcomeDialog1();
         }
-
     }
 
     public void handleAuthentication() {
@@ -81,12 +80,13 @@ public class MainActivity extends AppCompatActivity {
     public void showWelcomeDialog1() {
         AlertDialog.Builder builder = new AlertDialog.Builder(
                 new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+        builder.setCancelable(false);
         builder.setTitle("Instructions (1/3)");
         builder.setMessage("Welcome! " +
                 "In this game you have to find as much rhyme words as possible " +
                 "within the specified time. Do you got what it takes to become " +
                 "the next rhyme master?");
-        builder.setNegativeButton(">", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Yeah!!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 showWelcomeDialog2();
             }
@@ -98,17 +98,18 @@ public class MainActivity extends AppCompatActivity {
     public void showWelcomeDialog2() {
         AlertDialog.Builder builder = new AlertDialog.Builder(
                 new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+        builder.setCancelable(false);
         builder.setTitle("Instructions (2/3)");
         builder.setMessage("You can choose your difficulty, ranging from Easy to Insane. " +
                 "The difficulty influences the words as well as the time to rhyme. " +
                 "You can also earn achievements and keep track of your scores " +
                 "in the global leaderboard. These can be found in the Main Menu.");
-        builder.setNegativeButton(">", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Got it!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 showWelcomeDialog3();
             }
         });
-        builder.setPositiveButton("<", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("<", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 showWelcomeDialog1();
             }
@@ -120,11 +121,11 @@ public class MainActivity extends AppCompatActivity {
     public void showWelcomeDialog3() {
         AlertDialog.Builder builder = new AlertDialog.Builder(
                 new ContextThemeWrapper(this, R.style.AlertDialogCustom));
-
+        builder.setCancelable(false);
         builder.setTitle("Instructions (3/3)");
         builder.setMessage("Important: you will need an active internet connection to be able " +
                 "to play the game and check out the leaderboard. Have fun playing!");
-        builder.setNegativeButton("OK!", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Thanks!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // save to SharedPreferences
                 SharedPreferences.Editor editor = getSharedPreferences(
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        builder.setPositiveButton("<", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("<", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 showWelcomeDialog2();
             }

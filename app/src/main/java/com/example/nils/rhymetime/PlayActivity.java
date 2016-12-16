@@ -14,6 +14,7 @@ import android.support.v7.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,11 +37,10 @@ import java.util.concurrent.ExecutionException;
 
 public class PlayActivity extends AppCompatActivity {
 
+    private String stage; // easy, medium, hard or insane (param from PlayOverviewActivity)
+
     public List<String> possibleWords; // from here one word is randomly chosen
     private String theRhymeWord; // the chosen word you have to rhyme with
-    private String searchResults; // all rhyme-words for this word from the API as a string
-
-    private String stage; // easy, medium, hard or insane (param from PlayOverviewActivity)
 
     // from searchResults (String) to JSON Object to ArrayList of RhymeWord objects
     private ArrayList<RhymeWord> allRhymeWords;
@@ -50,11 +50,10 @@ public class PlayActivity extends AppCompatActivity {
     private ArrayList<String> alreadyGuessed;
 
     private int currentScore; // score for the word the user has currently guessed
-    private String currentWord; // word the user has currently guessed
     private int totalScore; // total score in this round
     private int totalRhymeWordsFound; // total rhyme words found in this round
     private int totalTime; // start time of current stage
-    private long remainingTime; // remaining time when pressing 'back'-button
+    private long remainingTime; // remaining time when entering pause dialog
 
     // all XML objects for the UI
     private TextView wordToRhymeWithTV;
@@ -66,10 +65,9 @@ public class PlayActivity extends AppCompatActivity {
     private GridView alreadyGuessedGridView;
     private CustomAdapter toDoListAdapter;
 
-    private CountDownTimer countDownTimer;
+    private CountDownTimer countDownTimer; // timer
 
-    private static String FIREBASE_URL = "https://rhymetime-b8195.firebaseio.com/";
-    private String username;
+    private String username; // Google username when logged in, otherwise 'anonymous'
 
 
     @Override
@@ -86,6 +84,7 @@ public class PlayActivity extends AppCompatActivity {
         showStartingDialog();
         initializeAdapter();
         getAllRhymes();
+        setEditTextListener();
     }
 
     // initialize all (xml) objects and variables
@@ -98,7 +97,7 @@ public class PlayActivity extends AppCompatActivity {
         lineView = findViewById(R.id.lineView);
         currentWordET = (EditText) findViewById(R.id.currentWordET);
         checkButton = (Button) findViewById(R.id.checkButton);
-        infoTV = (TextView)findViewById(R.id.infoTV);
+        infoTV = (TextView) findViewById(R.id.infoTV);
         totalRhymeWordsFound = 0;
         totalScore = 0;
 
@@ -106,7 +105,6 @@ public class PlayActivity extends AppCompatActivity {
         int i = rand.nextInt((possibleWords.size()));
         System.out.println("i is:" + i + "  and possibleWords is " + possibleWords);
         theRhymeWord = possibleWords.get(i);
-
     }
 
     /* This method sets the correct time and the possible words list,
@@ -118,12 +116,12 @@ public class PlayActivity extends AppCompatActivity {
         switch (stage) {
             case "easy":
                 totalTime = 70000;
-                possibleWords = Arrays.asList("sing", "cat", "walk", "pan", "fire");
+                possibleWords = Arrays.asList("sing", "cat", "you", "pan", "gong", "though");
                 break;
             case "medium":
                 totalTime = 60000;
-                possibleWords = Arrays.asList("sleep", "though", "blue", "cool",
-                        "though", "boat", "plant", "brick", "fire");
+                possibleWords = Arrays.asList("sleep", "blue", "cool",
+                        "boat", "plant", "brick", "fire", "walk");
                 break;
             case "hard":
                 totalTime = 50000;
@@ -133,12 +131,12 @@ public class PlayActivity extends AppCompatActivity {
             case "insane":
                 totalTime = 40000;
                 possibleWords = Arrays.asList("babe", "against", "lyrics", "sullen",
-                            "gravity", "subtle", "colonel", "lettuce", "squirrel",
+                        "gravity", "subtle", "colonel", "lettuce", "squirrel",
                         "fruit", "chorus", "tough", "cough", "bought");
                 break;
             default: // fallback
                 totalTime = 60000;
-                possibleWords = Arrays.asList("random", "native", "app","studio");
+                possibleWords = Arrays.asList("random", "native", "app", "studio");
                 break;
         }
     }
@@ -165,6 +163,7 @@ public class PlayActivity extends AppCompatActivity {
     public void showStartingDialog() {
         AlertDialog.Builder startBuilder = new AlertDialog.Builder(
                 new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+        startBuilder.setCancelable(false);
         startBuilder.setTitle("The word you have to rhyme with is \'" + theRhymeWord + "\'.");
         startBuilder.setMessage("You have 60 seconds. Try to find as much rhyme words as possible!");
         startBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -213,6 +212,7 @@ public class PlayActivity extends AppCompatActivity {
         currentWordET.clearFocus();
         checkButton.setVisibility(View.INVISIBLE);
         infoTV.setVisibility(View.INVISIBLE);
+        alreadyGuessedGridView.setVisibility(View.INVISIBLE);
     }
 
     // set a timer corresponding to the level's difficulty
@@ -254,15 +254,16 @@ public class PlayActivity extends AppCompatActivity {
     public void showEndingDialog() {
         AlertDialog.Builder finishBuilder = new AlertDialog.Builder(
                 new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+        finishBuilder.setCancelable(false);
         finishBuilder.setTitle("Time's up!");
         if (totalRhymeWordsFound > 1) {
             finishBuilder.setMessage("You found " + totalRhymeWordsFound +
-                        " rhyme words with a total of " + totalScore + " points, good job!");
+                    " rhyme words with a total of " + totalScore + " points, good job!");
         } else {
             finishBuilder.setMessage("You found " + totalRhymeWordsFound +
                     " rhyme words. You scored " + totalScore + " points, better luck next time!");
         }
-        finishBuilder.setNegativeButton("Main Menu", new DialogInterface.OnClickListener() {
+        finishBuilder.setPositiveButton("Main Menu", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // go back to MainActivity
                 Intent goToPlayOverview = new Intent(getApplicationContext(),
@@ -275,7 +276,7 @@ public class PlayActivity extends AppCompatActivity {
                 finish();
             }
         });
-        finishBuilder.setPositiveButton("Leaderboard", new DialogInterface.OnClickListener() {
+        finishBuilder.setNegativeButton("Leaderboard", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // go back to ScoreOverviewActivity
                 Intent goToScoreOverview = new Intent(getApplicationContext(),
@@ -303,6 +304,7 @@ public class PlayActivity extends AppCompatActivity {
         String wordExpl = "\'" + theRhymeWord + "\'";
         wordToRhymeWithTV.setText(wordExpl);
 
+        String searchResults;
         try {
             searchResults = movieAsyncTask.get();
         } catch (InterruptedException | ExecutionException e) {
@@ -349,12 +351,34 @@ public class PlayActivity extends AppCompatActivity {
         }
     }
 
+    // this method is called whenever the 'Check' button is clicked
+    public void callValidateUserInput(View view) {
+        validateUserInput();
+    }
+
+    /* Besides pressing the 'Check' button after typing in a rhyme word, the user should
+     * also be able to just press "Enter" to perform a search action. That's why we add
+     * an event listener to the EditText that calls validateUserInput on an Enter-press.
+     */
+    public void setEditTextListener() {
+        currentWordET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction (TextView v,int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    validateUserInput();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
     /* Whenever a user clicks on the 'check' button, match input with allRhymeWords ArrayList.
      * Based on this give positive or negative feedback and update alreadyGuessed ArrayList
      * (used for the ending of the level for correct score AND UI).
      */
-    public void validateUserInput(View view) {
-        currentWord = currentWordET.getText().toString(); // get current user input
+    public void validateUserInput() {
+        String currentWord = currentWordET.getText().toString();
 
         if (currentWord.length() != 0) {
             boolean wordMatchBool = false;
@@ -415,7 +439,7 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     @Override
-    // when the back button is pressed, let user confirm they want to leave
+    // when the back button is pressed (twice), let user confirm they want to leave
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             countDownTimer.cancel(); // pause timer
@@ -435,6 +459,7 @@ public class PlayActivity extends AppCompatActivity {
     public void showLeavingDialog(final long remainingTime) {
         AlertDialog.Builder leaveBuilder = new AlertDialog.Builder(
                 new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+        leaveBuilder.setCancelable(false);
         leaveBuilder.setTitle("Psst");
         leaveBuilder.setMessage("Your current progress will not be saved. " +
                 " Are you sure you want to leave?");
@@ -497,8 +522,8 @@ public class PlayActivity extends AppCompatActivity {
                 editor.putBoolean("A1Unlocked", true); // save to SharedPreferences
                 layout.setBackgroundResource(R.color.A2Color); // give Toast
                 tv.setText("Congratulations! You unlocked \n" +
-                        "\'The Gentlest Experimentalist\' \n " +
-                        "You found at least one rhyme word in every stage." +
+                        "\'The Gentlest Experimentalist\' \n" +
+                        "You found at least one rhyme word in every stage. " +
                         "Keep up the good work!");
             }
         }
@@ -511,7 +536,7 @@ public class PlayActivity extends AppCompatActivity {
                 layout.setBackgroundResource(R.color.A1Color); // give Toast
                 tv.setText("Congratulations! You unlocked \n" +
                         "\'Easy Complication\' \n " +
-                        "You found " + totalRhymeWordsFound + " words in Easy mode." +
+                        "You found " + totalRhymeWordsFound + " words in Easy mode. " +
                         "Easy Peasy huh?");
             }
         }
@@ -523,7 +548,7 @@ public class PlayActivity extends AppCompatActivity {
                 editor.putBoolean("A3Unlocked", true); // save to SharedPreferences
                 layout.setBackgroundResource(R.color.A3Color); // give Toast
                 tv.setText("Congratulations! You unlocked \n" +
-                        "\'1001 Nights of Practice\' \n " +
+                        "\'1001 Nights of Practice\' \n" +
                         "You scored " + totalScore + "points. Nice!");
             }
         }
@@ -535,7 +560,7 @@ public class PlayActivity extends AppCompatActivity {
                 editor.putBoolean("A4Unlocked", true); // save to SharedPreferences
                 layout.setBackgroundResource(R.color.A4Color); // give Toast
                 tv.setText("Congratulations! You unlocked \n" +
-                        "\'Shaky Spears!\' \n " +
+                        "\'Shaky Spears!\' \n" +
                         "You found " + totalRhymeWordsFound +
                         " words in hard mode. Good job!");
             }
@@ -563,8 +588,8 @@ public class PlayActivity extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_LONG);
         toast.show();
 
-        // Toast.LENGTH_LONG is 3.5 seconds, which is a little too short, so we'll double this
-        new CountDownTimer(3500, 1000)
+        // Toast.LENGTH_LONG (3.5 sec) + 3 sec = 6.5 sec
+        new CountDownTimer(3000, 1000)
         {
             public void onTick(long millisUntilFinished) {toast.show();}
             public void onFinish() {toast.show();}
@@ -572,21 +597,7 @@ public class PlayActivity extends AppCompatActivity {
         }.start();
     }
 
-    // necessary?
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    // THIS CODE IS NOT READY YET
-    //public static void hideSoftKeyboard(Activity activity) {
-    //    InputMethodManager inputMethodManager =
-    //            (InputMethodManager) activity.getSystemService(
-    //                    Activity.INPUT_METHOD_SERVICE);
-    //    inputMethodManager.hideSoftInputFromWindow(
-    //            activity.getCurrentFocus().getWindowToken(), 0);
-    //}
-
-    // THIS CODE IS NOT READY YET
+    // when level is finished, save score to FireBase database
     public void saveScoreToDB() {
         // create new score object with the correct variables
         Score score = new Score(username,
@@ -598,6 +609,7 @@ public class PlayActivity extends AppCompatActivity {
 
         // save score object to database
         Firebase.setAndroidContext(this);
+        String FIREBASE_URL = "https://rhymetime-b8195.firebaseio.com/";
         Firebase ref = new Firebase(FIREBASE_URL);
         Firebase newRef = ref.child("Scores").push();
         newRef.setValue(score);
